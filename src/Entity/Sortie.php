@@ -46,11 +46,11 @@ class Sortie
 
     #[ORM\ManyToOne(inversedBy: 'sorties')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?etat $etat = null;
+    private ?Etat $etat = null;
 
     #[ORM\ManyToOne(inversedBy: 'sorties')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?lieu $lieu = null;
+    private ?Lieu $lieu = null;
 
     public function __construct()
     {

@@ -9,9 +9,11 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ParticipantRepository::class)]
-#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
+#[UniqueEntity(fields: ['email'], message: 'Il existe déjà un compte avec cet email')]
+#[UniqueEntity(fields: ['pseudo'], message: 'Ce pseudo est déjà pris')]
 class Participant implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -49,15 +51,15 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $pseudo = null;
 
-    #[ORM\ManyToMany(targetEntity: sortie::class, inversedBy: 'participants')]
+    #[ORM\ManyToMany(targetEntity: Sortie::class, inversedBy: 'participants')]
     private Collection $estInscrit;
 
-    #[ORM\OneToMany(mappedBy: 'organisateur', targetEntity: sortie::class)]
+    #[ORM\OneToMany(mappedBy: 'organisateur', targetEntity: Sortie::class)]
     private Collection $organise;
 
     #[ORM\ManyToOne(inversedBy: 'participants')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?campus $campus = null;
+    private ?Campus $campus = null;
 
     public function __construct()
     {

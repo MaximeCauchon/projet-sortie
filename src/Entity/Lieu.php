@@ -32,7 +32,7 @@ class Lieu
 
     #[ORM\ManyToOne(inversedBy: 'lieux')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?ville $ville = null;
+    private ?Ville $ville = null;
 
     public function __construct()
     {
