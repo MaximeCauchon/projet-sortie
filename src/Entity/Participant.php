@@ -49,15 +49,15 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $pseudo = null;
 
-    #[ORM\ManyToMany(targetEntity: sortie::class, inversedBy: 'participants')]
+    #[ORM\ManyToMany(targetEntity: Sortie::class, inversedBy: 'participants')]
     private Collection $estInscrit;
 
-    #[ORM\OneToMany(mappedBy: 'organisateur', targetEntity: sortie::class)]
+    #[ORM\OneToMany(mappedBy: 'organisateur', targetEntity: Sortie::class)]
     private Collection $organise;
 
     #[ORM\ManyToOne(inversedBy: 'participants')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?campus $campus = null;
+    private ?Campus $campus = null;
 
     public function __construct()
     {
