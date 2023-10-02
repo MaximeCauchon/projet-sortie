@@ -42,7 +42,9 @@ class RegistrationFormType extends AbstractType
 			->add('pseudo', TextType::class)
 			->add('nom', TextType::class)
 			->add('prenom', TextType::class)
-			->add('telephone', TextType::class)
+			->add('telephone', TextType::class, [
+				'required'=>false,
+			])
 			->add('isActif', CheckboxType::class)
 			->add('image', TextType::class, [
 				'required'=>false,
