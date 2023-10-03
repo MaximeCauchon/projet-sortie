@@ -4,7 +4,7 @@
 {% endblock %}
 
 {% block body %}
-	<div class="flex flex-col">
+	<main class="flex flex-col">
 		<h1 class=" text-center my-5">
 			Créer une sortie
 		</h1>
@@ -22,15 +22,27 @@
 			<div class="space-y-3">
 				{{ form_row(nouvelleSortieForm.ville) }}
 				{{ form_row(nouvelleSortieForm.lieu) }}
+				<div>
+					Rue :
+				</div>
+				<div>
+					Code postal :
+				</div>
+				<div>
+					Latitude :
+				</div>
+				<div>
+					Longitude :
+				</div>
 			</div>
 		</div>
 
-		<div>
-			{{ form_row(nouvelleSortieForm.enregistrer) }}
-			{{ form_row(nouvelleSortieForm.publier) }}
-			<a href="./sorties">Annuler</a>
+		<div class="flex mt-12 space-x-6 justify-center">
+			{{ form_row(nouvelleSortieForm.enregistrer, { 'attr': {'class': 'border-2 border-black px-3 py-1 shadow-md shadow-slate-950'}}) }}
+			{{ form_row(nouvelleSortieForm.publier, { 'attr': {'class': 'border-2 border-black px-3 py-1 shadow-md shadow-slate-950'}}) }}
+			<a href="./sorties" class="border-2 border-black px-3 py-1 shadow-md shadow-slate-950">Annuler</a>
 		</div>
 
 		{{ form_end(nouvelleSortieForm) }}
-	</div>
+	</main>
 {% endblock %}
