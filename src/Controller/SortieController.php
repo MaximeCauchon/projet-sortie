@@ -16,12 +16,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class SortieController extends AbstractController
 {
     #[Route('/nouvelle-sortie', name: 'nouvelle_sortie')]
-    #[Route('/modifier-sortie/{id}', name: 'modifier_sortie')]
-    public function index(?Sortie $sortie, Request $request, EntityManagerInterface $entityManager): Response
+    public function index(Request $request, EntityManagerInterface $entityManager): Response
     {   
-        if(!$sortie){
-            $sortie = new Sortie();
-        }
+
+        $sortie = new Sortie();
+
 
         $currentUser = $this->getUser();
         $sortie->setOrganisateur($currentUser);
@@ -40,14 +39,10 @@ class SortieController extends AbstractController
             if ($nouvelleSortieForm->get('publier')->isClicked()) {
                 $sortie->setEtat($etatRepo->find(2));
             }
-
-            if(!$sortie->getId()){
-                $entityManager->persist($sortie);
-            }
-
+            $entityManager->persist($sortie);
             $entityManager->flush();
 
-            return $this->redirect($this->generateUrl('modifier_sortie', ['id' => $sortie->getId()]));
+            return $this->redirect($this->generateUrl('details-sortie', ['id' => $sortie->getId()]));
         }
 
         return $this->render('sortie/nouvelle-sortie.html.twig', [
