@@ -1,13 +1,44 @@
 <!DOCTYPE html>
-<html>
-    <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  {% block stylesheets %}
-    {{ encore_entry_link_tags('app') }}
-  {% endblock %}
+<html lang="fr-FR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sortir{% block title %}{% endblock %}</title>
+    <link rel="icon"
+          href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+    {% endblock %}
+
+    {% block javascripts %}
+    {% endblock %}
 </head>
-    <body>
-        {% block body %}{% endblock %}
-    </body>
+<header>
+    <h1>Sortir !</h1>
+    <ul>
+        <li><a href="{{ path("app_main") }}">Accueil</a></li>
+        {% if app.user %}
+            {% if is_granted("ROLE_ADMIN") %}
+                <li><a href="" title="Gestion des Participants">Gestion des Participants</a></li>
+                <li><a>Villes</a></li>
+                <li><a>Campus</a></li>
+            {% endif %}
+            <li><a href="{{ path("security_editLoggedUser") }}" title="Modifier mon profil">Mon Profil</a></li>
+            <li><a href="{{ path("app_logout") }}" title="Déconnectez-vous">Se déconnecter</a></li>
+        {% else %}
+            <li><a href="{{ path("app_login") }}" title="Connectez-vous">Se connecter</a></li>
+        {% endif %}
+    </ul>
+</header>
+{% for label, messages in app.flashes %}
+    {% for message in messages %}
+        <div class="alert-{{ label }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endfor %}
+<body>
+{% block body %}{% endblock %}
+</body>
 </html>
