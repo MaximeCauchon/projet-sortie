@@ -2,13 +2,12 @@
 
 namespace App\Form;
 
-use DateTime;
+
 use App\Entity\Lieu;
 use App\Entity\Ville;
 use App\Entity\Sortie;;
 
 use Symfony\Component\Form\AbstractType;
-use function Symfony\Component\Clock\now;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
