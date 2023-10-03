@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} | Editer mon compte{% endblock %}
+
+
+{% block body %}
+    <h1>Editer mon profil</h1>
+
+    {{ form_errors(editLoggedUserForm) }}
+
+    {{ form_start(editLoggedUserForm) }}
+
+    {{ form_widget(editLoggedUserForm) }}
+    <button type="submit" class="btn">Modifier mon profil</button>
+
+    {{ form_end(editLoggedUserForm) }}
+
+    <h1>Editer mon mot de passe</h1>
+
+    {{ form_errors(editLoggedUserPasswordForm) }}
+
+    {{ form_start(editLoggedUserPasswordForm) }}
+
+    {{ form_widget(editLoggedUserPasswordForm) }}
+    <button type="submit" class="btn">Modifier mon mot de passe</button>
+
+    {{ form_end(editLoggedUserPasswordForm) }}
+{% endblock %}
+

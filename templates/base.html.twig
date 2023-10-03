@@ -17,6 +17,8 @@
 <header>
     <h1>Sortir !</h1>
     <ul>
+        <li><a>Villes</a></li>
+        <li><a>Campus</a></li>
         <li><a href="{{ path("app_main") }}">Accueil</a></li>
         {% if app.user %}
             {% if is_granted("ROLE_ADMIN") %}
@@ -38,6 +40,7 @@
         </div>
     {% endfor %}
 {% endfor %}
+<body>
 {% block body %}{% endblock %}
 </body>
 </html>
