@@ -1,7 +1,3 @@
 @tailwind components;
 @tailwind utilities;
 
-input {
-    margin: 0 5px;
-    border: solid black ;
-}

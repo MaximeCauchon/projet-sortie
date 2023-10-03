@@ -7,6 +7,7 @@ use App\Entity\Etat;
 use App\Entity\Sortie;
 use App\Form\NouvelleSortieType;
 use App\Repository\SortieRepository;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,9 +17,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class SortieController extends AbstractController
 {
     #[Route('/nouvelle-sortie', name: 'nouvelle_sortie')]
-    public function index(Request $request, EntityManagerInterface $entityManager): Response
+    public function ajoutSortie(Request $request, EntityManagerInterface $entityManager): Response
     {   
-
         $sortie = new Sortie();
 
 
@@ -48,6 +48,49 @@ class SortieController extends AbstractController
         return $this->render('sortie/nouvelle-sortie.html.twig', [
             'controller_name' => 'SortieController',
             'nouvelleSortieForm' => $nouvelleSortieForm->createView()
+        ]);
+    }
+
+    #[Route('/modifier-sortie/{id}', name: 'modifier_sortie')]
+    public function modifSortie(int $id, SortieRepository $sortieRepository, Request $request, EntityManagerInterface $entityManager): Response
+    {   
+        $sortie = $sortieRepository->find($id);
+        if(!$sortie) {
+            throw $this->createNotFoundException("Cette sortie n'existe pas.");
+        }
+
+        $etatRepo = $entityManager->getRepository(Etat::class);
+
+        $modifSortieForm = $this->createForm(NouvelleSortieType::class, $sortie);
+        $modifSortieForm->handleRequest($request);
+
+        if ($modifSortieForm->isSubmitted() && $modifSortieForm->isValid()) {
+
+            if ($modifSortieForm->get('publier')->isClicked()) {
+                $sortie->setEtat($etatRepo->find(2));
+            }
+            $entityManager->flush();
+
+            return $this->redirect($this->generateUrl('details-sortie', ['id' => $sortie->getId()]));
+        }
+
+        return $this->render('sortie/modif-sortie.html.twig', [
+            'controller_name' => 'SortieController',
+            'modifSortieForm' => $modifSortieForm->createView()
+        ]);
+    }
+
+    #[Route('/details-sortie/{id}', name: 'details_sortie')]
+    public function showSortie(int $id, SortieRepository $sortieRepository): Response
+    {   
+        $sortie = $sortieRepository->find($id);
+        if(!$sortie) {
+            throw $this->createNotFoundException("Cette sortie n'existe pas.");
+        }
+
+        return $this->render('sortie/details-sortie.html.twig', [
+            'controller_name' => 'SortieController',
+            'sortie' => $sortie
         ]);
     }
 }

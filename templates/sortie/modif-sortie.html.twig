@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier une sortie.
+{% endblock %}
+
+{% block body %}
+	<main class="flex flex-col">
+		<h1 class=" text-center my-5">
+			Modifier une sortie
+		</h1>
+
+		{{ form_start(modifSortieForm) }}
+		<div class="grid grid-cols-2 w-3/4 mx-auto text-xs">
+			<div class="space-y-3">
+				{{ form_row(modifSortieForm.nom) }}
+				{{ form_row(modifSortieForm.dateHeureDebut) }}
+				{{ form_row(modifSortieForm.dateLimiteInscription) }}
+				{{ form_row(modifSortieForm.nbInscriptionMax) }}
+				{{ form_row(modifSortieForm.duree) }}
+				{{ form_row(modifSortieForm.infosSortie) }}
+			</div>
+			<div class="space-y-3">
+				{{ form_row(modifSortieForm.ville) }}
+				{{ form_row(modifSortieForm.lieu) }}
+				<div>
+					Rue :
+				</div>
+				<div>
+					Code postal :
+				</div>
+				<div>
+					Latitude :
+				</div>
+				<div>
+					Longitude :
+				</div>
+			</div>
+		</div>
+
+		<div class="flex mt-12 space-x-6 justify-center">
+			{{ form_row(modifSortieForm.enregistrer, { 'attr': {'class': 'border-2 border-black px-3 py-1 shadow-md shadow-slate-950'}}) }}
+			{{ form_row(modifSortieForm.publier, { 'attr': {'class': 'border-2 border-black px-3 py-1 shadow-md shadow-slate-950'}}) }}
+            {{ form_row(modifSortieForm.supprimer, { 'attr': {'class': 'border-2 border-black px-3 py-1 shadow-md shadow-slate-950'}}) }}
+			<a href="./sorties" class="border-2 border-black px-3 py-1 shadow-md shadow-slate-950">Annuler</a>
+		</div>
+
+		{{ form_end(modifSortieForm) }}
+	</main>
+{% endblock %}
