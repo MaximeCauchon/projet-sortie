@@ -20,7 +20,6 @@
         <h1 class="">Sortir !</h1>
         <nav>
             <ul class="flex space-x-5 list-none">
-                <li><a href="{{ path("app_main") }}">Accueil</a></li>
                 {% if app.user %}
                     <li><a href="{{ path("app_main") }}">Accueil</a></li>
                     <li><a href="{{ path("nouvelle_sortie") }}">Créer une sortie</a></li>
