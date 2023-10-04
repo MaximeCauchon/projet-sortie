@@ -22,25 +22,21 @@
 			<div class="space-y-3">
 				{{ form_row(modifSortieForm.ville) }}
 				{{ form_row(modifSortieForm.lieu) }}
-				<div>
-					Rue :
-				</div>
-				<div>
-					Code postal :
-				</div>
-				<div>
-					Latitude :
-				</div>
-				<div>
-					Longitude :
-				</div>
+				<p>Rue :
+					{{ sortie.lieu.rue }}</p>
+				<p>Code postal :
+					{{ sortie.lieu.ville.codepostal }}</p>
+				<p>Latitude :
+					{{ sortie.lieu.latitude }}</p>
+				<p>Longitude :
+					{{ sortie.lieu.longitude }}</p>
 			</div>
 		</div>
 
 		<div class="flex mt-12 space-x-6 justify-center">
 			{{ form_row(modifSortieForm.enregistrer, { 'attr': {'class': 'border-2 border-black px-3 py-1 shadow-md shadow-slate-950'}}) }}
 			{{ form_row(modifSortieForm.publier, { 'attr': {'class': 'border-2 border-black px-3 py-1 shadow-md shadow-slate-950'}}) }}
-            {{ form_row(modifSortieForm.supprimer, { 'attr': {'class': 'border-2 border-black px-3 py-1 shadow-md shadow-slate-950'}}) }}
+          {#  {{ form_row(modifSortieForm.supprimer, { 'attr': {'class': 'border-2 border-black px-3 py-1 shadow-md shadow-slate-950'}}) }} #}
 			<a href="./sorties" class="border-2 border-black px-3 py-1 shadow-md shadow-slate-950">Annuler</a>
 		</div>
 

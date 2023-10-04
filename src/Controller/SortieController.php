@@ -71,11 +71,12 @@ class SortieController extends AbstractController
             }
             $entityManager->flush();
 
-            return $this->redirect($this->generateUrl('details-sortie', ['id' => $sortie->getId()]));
+            return $this->redirect($this->generateUrl('details_sortie', ['id' => $sortie->getId()]));
         }
 
         return $this->render('sortie/modif-sortie.html.twig', [
             'controller_name' => 'SortieController',
+            'sortie' => $sortie,
             'modifSortieForm' => $modifSortieForm->createView()
         ]);
     }

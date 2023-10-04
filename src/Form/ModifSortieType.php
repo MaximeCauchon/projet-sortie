@@ -18,7 +18,7 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\DateIntervalType;
 
-class NouvelleSortieType extends AbstractType
+class ModifSortieType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
