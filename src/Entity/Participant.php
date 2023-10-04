@@ -274,4 +274,22 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function participantInscritSortie(Sortie $sortie) : bool
+    {
+        if ( $this->getEstInscrit()->contains($sortie)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function participantOrganisateurSortie(Sortie $sortie) : bool
+    {
+        if ( $this->getOrganise()->contains($sortie)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
