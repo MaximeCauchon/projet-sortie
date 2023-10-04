@@ -78,8 +78,9 @@ class SecurityController extends AbstractController
 				// Before changing the filepath, we delete the old file
 				$filename = $user->getImage();
 				if ($filename) {
+					$fileRoute = $this->getParameter("avatar_directory").$filename;
 					$filesystem = new Filesystem();
-					$filesystem->remove("uploads/avatars/".$filename);
+					$filesystem->remove($fileRoute);
 				}
 
 				$user->setImage($newFilename);
