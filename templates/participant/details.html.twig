@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ParticipantController!{% endblock %}
+
+{% block body %}
+    <section>
+        <div class="container">
+            <h1 class="text-center">
+                {{ participant.pseudo }}
+            </h1>
+            <div class="flex justify-center items-center">
+                {% if participant.image %}
+                    <img src="{{ asset('uploads/avatars/' ~ participant.image) }}"
+                         alt="avatar de {{ participant.pseudo }}" class="w-96 rounded-full">
+                {% endif %}
+                <p class="m-5">
+                    <b>Prénom : </b>{{ participant.prenom }}<br>
+                    <b>Nom : </b>{{ participant.nom }}<br>
+                    <b>Téléphone : </b>{{ participant.telephone }}<br>
+                    <b>Email : </b>{{ participant.email }}<br>
+                    <b>Campus : </b>{{ participant.campus.nom }}
+                </p>
+            </div>
+        </div>
+    </section>
+{% endblock %}
