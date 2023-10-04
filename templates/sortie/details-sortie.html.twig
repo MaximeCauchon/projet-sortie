@@ -9,7 +9,39 @@
 			Afficher une sortie
 		</h1>
 
-        {{ sortie.nom }}
+		<div class="grid grid-cols-2 w-3/4 self-center">
+			<div>
+				<p>Nom de la sortie :
+					{{ sortie.nom }}</p>
+				<p>Date et heure de la sortie :
+					{{ sortie.dateHeureDebut | date("d/m/Y H:i", "Europe/Paris") }}</p>
+				<p>Date limite d'inscription :
+					{{ sortie.dateLimiteInscription | date("d/m/Y H:i", "Europe/Paris") }}</p>
+				<p>Nombre de places :
+					{{ sortie.nbInscriptionMax }}</p>
+				<p>Durée :
+					{{ sortie.duree | date("%I") }} minutes</p>
+				<p>Description et infos :
+					{{ sortie.infosSortie }}</p>
+			</div>
+			<div>
+				<p>Campus :
+					{{ sortie.campus.nom }}</p>
+				<p>Ville :
+					{{ sortie.lieu.ville.nom }} </p>
+				<p>Lieu :
+					{{ sortie.lieu.nom }}</p>
+				<p>Rue :
+					{{ sortie.lieu.rue }}</p>
+				<p>Code postal :
+					{{ sortie.lieu.ville.codepostal }}</p>
+				<p>Latitude :
+					{{ sortie.lieu.latitude }}</p>
+				<p>Longitude :
+					{{ sortie.lieu.longitude }}</p>
+			</div>
+		</div>
+
 
 	</main>
 {% endblock %}
