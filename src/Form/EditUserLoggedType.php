@@ -5,9 +5,11 @@ namespace App\Form;
 use App\Entity\Participant;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Image;
 
 class EditUserLoggedType extends AbstractType
 {
@@ -25,12 +27,18 @@ class EditUserLoggedType extends AbstractType
 				'label' => 'Téléphone'
 			])
             ->add('isActif')
-			->add('image', TextType::class, [
-				'required'=>false,
-				'label' => 'Lien vers une photo'
+			->add('imageFile', FileType::class, [
+				'label' => 'Photo de profil',
+				'mapped' => false,
+				'required' => false,
+				'constraints' => [
+					new Image([
+						'maxSize' => '1024k',
+						'mimeTypesMessage' => 'Merci d\'utiliser un format d\'image valide.',
+					])
+				],
 			])
-
-        ;
+		;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

@@ -46,22 +46,22 @@ class RegistrationFormType extends AbstractType
 				'required'=>false,
 			])
 			->add('isActif', CheckboxType::class)
-			->add('image', TextType::class, [
-				'required'=>false,
-			])
+//			->add('image', TextType::class, [
+//				'required'=>false,
+//			])
 			->add('campus', EntityType::class, [
 				'class' => Campus::class,
 				'choice_label' => 'nom',
 
-			])
-			->add('agreeTerms', CheckboxType::class, [
-				'mapped' => false,
-				'constraints' => [
-					new IsTrue([
-						'message' => 'You should agree to our terms.',
-					]),
-				],
 			]);
+//			->add('agreeTerms', CheckboxType::class, [
+//				'mapped' => false,
+//				'constraints' => [
+//					new IsTrue([
+//						'message' => 'You should agree to our terms.',
+//					]),
+//				],
+//			]);
 	}
 
 	public function configureOptions(OptionsResolver $resolver): void
