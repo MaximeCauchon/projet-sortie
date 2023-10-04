@@ -61,8 +61,7 @@ class NouvelleSortieType extends AbstractType
                 'choice_label' => 'nom'
             ])
             ->add('enregistrer', SubmitType::class, ['label' => 'Enregistrer'])
-            ->add('publier', SubmitType::class, ['label' => 'Publier'])
-            ->getForm();
+            ->add('publier', SubmitType::class, ['label' => 'Publier']);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

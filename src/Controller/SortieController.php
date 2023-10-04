@@ -2,12 +2,11 @@
 
 namespace App\Controller;
 
-use App\Entity\Campus;
 use App\Entity\Etat;
 use App\Entity\Sortie;
+use App\Form\ModifSortieType;
 use App\Form\NouvelleSortieType;
 use App\Repository\SortieRepository;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,16 +17,16 @@ class SortieController extends AbstractController
 {
     #[Route('/nouvelle-sortie', name: 'nouvelle_sortie')]
     public function ajoutSortie(Request $request, EntityManagerInterface $entityManager): Response
-    {   
+    {
         $sortie = new Sortie();
 
 
         $currentUser = $this->getUser();
         $sortie->setOrganisateur($currentUser);
-        
+
         $nouvelleSortieForm = $this->createForm(NouvelleSortieType::class, $sortie);
         $nouvelleSortieForm->handleRequest($request);
-       
+
         $etatRepo = $entityManager->getRepository(Etat::class);
         $sortie->setEtat($etatRepo->find(1));
 
@@ -42,7 +41,7 @@ class SortieController extends AbstractController
             $entityManager->persist($sortie);
             $entityManager->flush();
 
-            return $this->redirect($this->generateUrl('details-sortie', ['id' => $sortie->getId()]));
+            return $this->redirect($this->generateUrl('details_sortie', ['id' => $sortie->getId()]));
         }
 
         return $this->render('sortie/nouvelle-sortie.html.twig', [
@@ -53,18 +52,25 @@ class SortieController extends AbstractController
 
     #[Route('/modifier-sortie/{id}', name: 'modifier_sortie')]
     public function modifSortie(int $id, SortieRepository $sortieRepository, Request $request, EntityManagerInterface $entityManager): Response
-    {   
+    {
         $sortie = $sortieRepository->find($id);
-        if(!$sortie) {
+        if (!$sortie) {
             throw $this->createNotFoundException("Cette sortie n'existe pas.");
         }
 
         $etatRepo = $entityManager->getRepository(Etat::class);
 
-        $modifSortieForm = $this->createForm(NouvelleSortieType::class, $sortie);
+        $modifSortieForm = $this->createForm(ModifSortieType::class, $sortie);
         $modifSortieForm->handleRequest($request);
 
         if ($modifSortieForm->isSubmitted() && $modifSortieForm->isValid()) {
+
+            if ($modifSortieForm->get('supprimer')->isClicked()) {
+                $entityManager->remove($sortie);
+                $entityManager->flush();
+
+                return $this->redirect($this->generateUrl('app_main'));
+            }
 
             if ($modifSortieForm->get('publier')->isClicked()) {
                 $sortie->setEtat($etatRepo->find(2));
@@ -83,9 +89,9 @@ class SortieController extends AbstractController
 
     #[Route('/details-sortie/{id}', name: 'details_sortie')]
     public function showSortie(int $id, SortieRepository $sortieRepository): Response
-    {   
+    {
         $sortie = $sortieRepository->find($id);
-        if(!$sortie) {
+        if (!$sortie) {
             throw $this->createNotFoundException("Cette sortie n'existe pas.");
         }
 
