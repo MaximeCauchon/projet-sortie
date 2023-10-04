@@ -29,7 +29,7 @@
                         <li><a href="{{ path('admin_gestionVilles') }}" title="Gestion des Villes">Villes</a></li>
                         <li><a href="{{ path('admin_gestionCampus') }}" title="Gestion des Campus">Campus</a></li>
                     {% endif %}
-                    <li><a href="{{ path("security_editLoggedUser") }}" title="Modifier mon profil">Mon Profil</a></li>
+                    <li><a href="{{ path("participant_editLoggedUser") }}" title="Modifier mon profil">Mon Profil</a></li>
                     <li><a href="{{ path("app_logout") }}" title="Déconnectez-vous">Se déconnecter</a></li>
                 {% else %}
                     <li><a href="{{ path("app_login") }}" title="Connectez-vous">Se connecter</a></li>
@@ -45,7 +45,6 @@
         </div>
     {% endfor %}
 {% endfor %}
-
 {% block body %}{% endblock %}
 </body>
 </html>
