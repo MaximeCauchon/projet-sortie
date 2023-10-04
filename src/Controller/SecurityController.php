@@ -8,11 +8,14 @@ use App\Form\EditUserLoggedType;
 use App\Form\RegistrationFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class SecurityController extends AbstractController
 {
@@ -43,7 +46,7 @@ class SecurityController extends AbstractController
 	}
 
 	#[Route(path: '/edition_profil', name: 'security_editLoggedUser')]
-	public function editLoggedUser(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPasswordHasher): Response
+	public function editLoggedUser(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPasswordHasher, SluggerInterface $slugger): Response
 	{
 		$user = $this->getUser();
 		$formEditLoggedUser = $this->createForm(EditUserLoggedType::class, $user);
@@ -53,6 +56,35 @@ class SecurityController extends AbstractController
 		$formEditLoggedUserPassword->handleRequest($request);
 
 		if ($formEditLoggedUser->isSubmitted() && $formEditLoggedUser->isValid()) {
+
+			$imageFile = $formEditLoggedUser->get('imageFile')->getData();
+
+			if ($imageFile) {
+				$originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
+				// this is needed to safely include the file name as part of the URL
+				$safeFilename = $slugger->slug($originalFilename);
+				$newFilename = $safeFilename . '-' . uniqid() . '.' . $imageFile->guessExtension();
+
+				try {
+					$imageFile->move(
+						$this->getParameter('avatar_directory'),
+						$newFilename
+					);
+				} catch (FileException $e) {
+					$this->addFlash('error', 'Un problème est survenue lors du chargement de votre image.');
+					$this->addFlash('error', $e->getMessage());
+				}
+
+				// Before changing the filepath, we delete the old file
+				$filename = $user->getImage();
+				if ($filename) {
+					$filesystem = new Filesystem();
+					$filesystem->remove("uploads/avatars/".$filename);
+				}
+
+				$user->setImage($newFilename);
+
+			}
 
 			$entityManager->persist($user);
 			$entityManager->flush();

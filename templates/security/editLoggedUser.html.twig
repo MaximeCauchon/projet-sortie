@@ -4,6 +4,8 @@
 
 
 {% block body %}
+
+    <img src="{{ asset('uploads/avatars/' ~ app.user.image) }}" alt="Avatar de {{ app.user.pseudo }}" class="w-96">
     <h1>Editer mon profil</h1>
 
     {{ form_errors(editLoggedUserForm) }}
