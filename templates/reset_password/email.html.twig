@@ -1,0 +1,15 @@
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Lien de réinitialisation de mot de passe{% endblock %}
+
+{% block body %}
+<h1>Bonjour !</h1>
+
+<p>Pour réintialiser votre mot de passe, veillez cliquer sur le lien suivant : </p>
+    <a href="{{ url('app_reset_password', {token: resetToken.token}) }}">{{ url('app_reset_password', {token: resetToken.token}) }}</a>
+
+<p>Ce lien ne sera plus valide le {{ resetToken.expiresAt|date("d/m/Y à H:i") }}.</p>
+
+<p>Merci !</p>
+{% endblock %}
