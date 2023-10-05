@@ -204,7 +204,7 @@ class ResetPasswordController extends AbstractController
 		try {
 			$resetToken = $this->resetPasswordHelper->generateResetToken($user);
 		} catch (ResetPasswordExceptionInterface $e) {
-			$this->addFlash('warning', 'Un lien vous a déjà été transmis. Attendez qu\'il se périme pour pouvoir en générer un nouveau.');
+			$this->addFlash('warning', 'Un lien vous a déjà été transmis. Attendez quelques instants avant de pouvoir en générer un nouveau.');
 			return $this->redirectToRoute('app_forgot_password_request');
 		}
 
