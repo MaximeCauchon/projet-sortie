@@ -45,4 +45,17 @@ class SortieRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+        public function findSortieWithLieu(int $sortieId)
+        {
+            return $this->createQueryBuilder('s')
+            ->select('s', 'l')
+            ->leftJoin('s.lieu', 'l')
+            ->where('s.id = :sortieId')
+            ->setParameter('sortieId', $sortieId)
+            ->getQuery()
+            ->getOneOrNullResult()
+            ;
+
+        }
 }
