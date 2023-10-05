@@ -5,7 +5,6 @@ namespace App\Form;
 use App\Entity\Lieu;
 use App\Entity\Ville;
 use App\Entity\Sortie;
-use App\Repository\VilleRepository;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
@@ -20,12 +19,6 @@ use Symfony\Component\Form\Extension\Core\Type\DateIntervalType;
 
 class ModifSortieType extends AbstractType
 {
-    private $villeRepository;
-    public function __construct(VilleRepository $villeRepository)
-    {
-        $this->villeRepository = $villeRepository;
-    }
-
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder

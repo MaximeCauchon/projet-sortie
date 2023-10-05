@@ -5,18 +5,23 @@ namespace App\Form;
 
 use App\Entity\Lieu;
 use App\Entity\Ville;
-use App\Entity\Sortie;;
+use App\Entity\Sortie;
+use App\Repository\LieuRepository;;
 
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\DateIntervalType;
+
 
 class NouvelleSortieType extends AbstractType
 {
@@ -54,12 +59,31 @@ class NouvelleSortieType extends AbstractType
                 'class' => Ville::class,
                 'choice_label' => 'nom',
                 'mapped' => false
-            ])
-            ->add('lieu', EntityType::class, [
+            ]);
+
+        $formModifier = function (FormInterface $form, Ville $ville = null): void {
+            $lieux = null === $ville ? [] : $ville->getLieux();
+            dump($lieux);
+
+            $form->add('lieu', EntityType::class, [
+                'class' => Lieu::class,
                 'label' => 'Lieu :',
                 'class' => Lieu::class,
-                'choice_label' => 'nom'
-            ])
+                'choice_label' => 'nom',
+                'placeholder' => '',
+                'choices' => $lieux
+            ]);
+        };
+
+        $builder->get('ville')->addEventListener(
+            FormEvents::POST_SUBMIT,
+            function (FormEvent $event) use ($formModifier): void {
+                $ville = $event->getForm()->getData();
+                $formModifier($event->getForm()->getParent(), $ville);
+            }
+        );
+
+        $builder
             ->add('enregistrer', SubmitType::class, ['label' => 'Enregistrer'])
             ->add('publier', SubmitType::class, ['label' => 'Publier']);
     }
