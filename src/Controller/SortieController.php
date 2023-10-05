@@ -3,13 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Etat;
-use App\Entity\Ville;
 use App\Entity\Sortie;
-use Doctrine\ORM\Mapping\Id;
 use App\Form\ModifSortieType;
 use App\Form\NouvelleSortieType;
-use App\Repository\LieuRepository;
-use App\Repository\VilleRepository;
 use App\Repository\SortieRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
