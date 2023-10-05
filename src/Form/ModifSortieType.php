@@ -5,6 +5,9 @@ namespace App\Form;
 use App\Entity\Lieu;
 use App\Entity\Ville;
 use App\Entity\Sortie;
+use App\Repository\VilleRepository;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -17,49 +20,63 @@ use Symfony\Component\Form\Extension\Core\Type\DateIntervalType;
 
 class ModifSortieType extends AbstractType
 {
+    private $villeRepository;
+    public function __construct(VilleRepository $villeRepository)
+    {
+        $this->villeRepository = $villeRepository;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-        ->add('nom', TextType::class, [
-            'label' => 'Nom de la sortie :'
-        ])
-        ->add('dateHeureDebut', DateTimeType::class, [
-            'label' => 'Date et heure de la sortie :'
-        ])
-        ->add('dateLimiteInscription', DateTimeType::class, [
-            'label' => "Date limite d'inscription :"
-        ])
-        ->add('nbInscriptionMax', IntegerType::class, [
-            'label' => 'Nombre de places :'
-        ])
-        ->add('duree', DateIntervalType::class, [
-            'label' => 'Durée :',
-            'with_years'  => false,
-            'with_months' => false,
-            'with_days'   => false,
-            'with_minutes'  => true,
-            'labels' => [
-                'minutes' => "minutes",
-            ]
-        ])
-        ->add('infosSortie', TextType::class, [
-            'label' => 'Descriptions et infos :'
-        ])
-        ->add('ville', EntityType::class, [
-            'label' => 'Ville :',
-            'class' => Ville::class,
-            'choice_label' => 'nom',
-            'mapped' => false
-        ])
-        ->add('lieu', EntityType::class, [
-            'label' => 'Lieu :',
-            'class' => Lieu::class,
-            'choice_label' => 'nom'
-        ])
-        ->add('enregistrer', SubmitType::class, ['label' => 'Enregistrer'])
-        ->add('publier', SubmitType::class, ['label' => 'Publier'])
-        ->add('supprimer', SubmitType::class, ['label' => 'Supprimer'])
-        ;
+            ->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+                $sortie = $event->getData();
+                $lieu = $sortie->getLieu();
+
+                $ville = $lieu->getVille()->getNom();
+                $event->getForm()->add('ville', EntityType::class, [
+                    'label' => 'Ville :',
+                    'class' => Ville::class,
+                    'choice_label' => 'nom',
+                    'placeholder' => $ville,
+                    'mapped' => false,
+                ]);
+            })
+
+            ->add('nom', TextType::class, [
+                'label' => 'Nom de la sortie :'
+            ])
+            ->add('dateHeureDebut', DateTimeType::class, [
+                'label' => 'Date et heure de la sortie :'
+            ])
+            ->add('dateLimiteInscription', DateTimeType::class, [
+                'label' => "Date limite d'inscription :"
+            ])
+            ->add('nbInscriptionMax', IntegerType::class, [
+                'label' => 'Nombre de places :'
+            ])
+            ->add('duree', DateIntervalType::class, [
+                'label' => 'Durée :',
+                'with_years'  => false,
+                'with_months' => false,
+                'with_days'   => false,
+                'with_minutes'  => true,
+                'labels' => [
+                    'minutes' => "minutes",
+                ]
+            ])
+            ->add('infosSortie', TextType::class, [
+                'label' => 'Descriptions et infos :'
+            ])
+            
+            ->add('lieu', EntityType::class, [
+                'label' => 'Lieu :',
+                'class' => Lieu::class,
+                'choice_label' => 'nom',
+            ])
+            ->add('enregistrer', SubmitType::class, ['label' => 'Enregistrer'])
+            ->add('publier', SubmitType::class, ['label' => 'Publier'])
+            ->add('supprimer', SubmitType::class, ['label' => 'Supprimer']);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

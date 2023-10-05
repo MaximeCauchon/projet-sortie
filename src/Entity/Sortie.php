@@ -189,24 +189,24 @@ class Sortie
         return $this;
     }
 
-    public function getEtat(): ?etat
+    public function getEtat(): ?Etat
     {
         return $this->etat;
     }
 
-    public function setEtat(?etat $etat): static
+    public function setEtat(?Etat $etat): static
     {
         $this->etat = $etat;
 
         return $this;
     }
 
-    public function getLieu(): ?lieu
+    public function getLieu(): ?Lieu
     {
         return $this->lieu;
     }
 
-    public function setLieu(?lieu $lieu): static
+    public function setLieu(?Lieu $lieu): static
     {
         $this->lieu = $lieu;
 

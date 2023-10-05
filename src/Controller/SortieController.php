@@ -3,9 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\Etat;
+use App\Entity\Ville;
 use App\Entity\Sortie;
+use Doctrine\ORM\Mapping\Id;
 use App\Form\ModifSortieType;
 use App\Form\NouvelleSortieType;
+use App\Repository\LieuRepository;
+use App\Repository\VilleRepository;
 use App\Repository\SortieRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,12 +18,14 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class SortieController extends AbstractController
-{
+{   
+    
+
+
     #[Route('/nouvelle-sortie', name: 'nouvelle_sortie')]
     public function ajoutSortie(Request $request, EntityManagerInterface $entityManager): Response
     {
         $sortie = new Sortie();
-
 
         $currentUser = $this->getUser();
         $sortie->setOrganisateur($currentUser);
@@ -53,7 +59,8 @@ class SortieController extends AbstractController
     #[Route('/modifier-sortie/{id}', name: 'modifier_sortie')]
     public function modifSortie(int $id, SortieRepository $sortieRepository, Request $request, EntityManagerInterface $entityManager): Response
     {
-        $sortie = $sortieRepository->find($id);
+        $sortie = $sortieRepository->findSortieWithLieu($id);
+        
         if (!$sortie) {
             throw $this->createNotFoundException("Cette sortie n'existe pas.");
         }
@@ -61,7 +68,7 @@ class SortieController extends AbstractController
         $etatRepo = $entityManager->getRepository(Etat::class);
 
         $modifSortieForm = $this->createForm(ModifSortieType::class, $sortie);
-        $modifSortieForm->handleRequest($request);
+        $modifSortieForm->handleRequest($request); 
 
         if ($modifSortieForm->isSubmitted() && $modifSortieForm->isValid()) {
 

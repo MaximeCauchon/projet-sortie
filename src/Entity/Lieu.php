@@ -122,12 +122,12 @@ class Lieu
         return $this;
     }
 
-    public function getVille(): ?ville
+    public function getVille(): ?Ville
     {
         return $this->ville;
     }
 
-    public function setVille(?ville $ville): static
+    public function setVille(?Ville $ville): static
     {
         $this->ville = $ville;
 
