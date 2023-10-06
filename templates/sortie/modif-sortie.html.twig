@@ -39,7 +39,7 @@
 			{{ form_row(modifSortieForm.enregistrer, { 'attr': {'class': 'border-2 border-black px-3 py-1 shadow-md shadow-slate-950'}}) }}
 			{{ form_row(modifSortieForm.publier, { 'attr': {'class': 'border-2 border-black px-3 py-1 shadow-md shadow-slate-950'}}) }}
 			{{ form_row(modifSortieForm.supprimer, { 'attr': {'class': 'border-2 border-black px-3 py-1 shadow-md shadow-slate-950'}}) }}
-			<a href="./" class="border-2 border-black px-3 py-1 shadow-md shadow-slate-950">Annuler</a>
+			<a href="{{path('app_affichage_sorties') }}" class="border-2 border-black px-3 py-1 shadow-md shadow-slate-950">Annuler</a>
 		</div>
 
 		{{ form_end(modifSortieForm) }}

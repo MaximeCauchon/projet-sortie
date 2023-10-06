@@ -23,6 +23,10 @@
 					{{ sortie.duree | date("%I") }} minutes</p>
 				<p>Description et infos :
 					{{ sortie.infosSortie }}</p>
+					{% if sortie.motifAnnulation %}
+					<p>Motif d'annulation :
+					{{ sortie.motifAnnulation }}</p>{% endif %}
+					
 			</div>
 			<div>
 				<p>Campus :

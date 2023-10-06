@@ -45,39 +45,43 @@
 								X
 							{% endif %}
 						</td>
-						<td>{{ sortie.organisateur.prenom }}
-							{{ sortie.organisateur.nom }}</td>
+						<td>
+							<a href="{{path('participant_details', {id : sortie.organisateur.id})}}">
+								{{ sortie.organisateur.prenom }}
+								{{ sortie.organisateur.nom }}
+							</a>
+						</td>
 						<td>
 							{% if sortie.etat.libelle != "Créée" %}
-								<a href="details-sortie/{{sortie.id}}">Afficher
+								<a href="{{path('details_sortie', {id : sortie.id})}}">Afficher
 								</a>
 							{% endif %}
 							{% if not app.user.participantOrganisateurSortie(sortie) %}
 								{% if sortie.etat.libelle == "Ouverte" and not app.user.participantInscritSortie(sortie) %}
-									<a href="inscription/{{sortie.id}}">S'inscrire
+									<a href="{{path('participant_inscription', {id : sortie.id})}}">S'inscrire
 									</a>
 								{% endif %}
 								{% if app.user.participantInscritSortie(sortie) 
                             and sortie.etat.libelle in ["Créée", "Ouverte", "Clôturée"] %}
-									<a href="desistement/{{sortie.id}}">Se désister
+									<a href="{{path('participant_desistement', {id : sortie.id})}}">Se désister
 									</a>
 								{% endif %}
 							{% endif %}
 
 
 							{% if sortie.etat.libelle == "Créée" and app.user.participantOrganisateurSortie(sortie)%}
-								<a href="modifier-sortie/{{sortie.id}}">Modifier
+								<a href="{{path('modifier_sortie', {id : sortie.id})}}">Modifier
 								</a>
-								<a href="publier-sortie/{{sortie.id}}">Publier
+								<a href="{{path('publier_sortie', {id : sortie.id})}}">Publier
 								</a>
-								<a href="supprimer-sortie/{{sortie.id}}">Supprimer
+								<a href="{{path('supprimer_sortie', {id : sortie.id})}}">Supprimer
 								</a>
 							{% endif %}
 							{% if 
                             sortie.etat.libelle in ["Ouverte", "Clôturée"]
                             and app.user.participantOrganisateurSortie(sortie)
                         %}
-								<a href="">Annuler
+								<a href="{{path('annuler_sortie', {id : sortie.id})}}">Annuler
 								</a>
 							{% endif %}
 						</td>

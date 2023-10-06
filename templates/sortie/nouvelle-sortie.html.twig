@@ -41,7 +41,7 @@
 		<div class="flex mt-12 space-x-6 justify-center">
 			{{ form_row(nouvelleSortieForm.enregistrer, { 'attr': {'class': 'border-2 border-black px-3 py-1 shadow-md shadow-slate-950'}}) }}
 			{{ form_row(nouvelleSortieForm.publier, { 'attr': {'class': 'border-2 border-black px-3 py-1 shadow-md shadow-slate-950'}}) }}
-			<a href="./sorties" class="border-2 border-black px-3 py-1 shadow-md shadow-slate-950">Annuler</a>
+			<a href="{{path('app_affichage_sorties') }}" class="border-2 border-black px-3 py-1 shadow-md shadow-slate-950">Annuler</a>
 		</div>
 
 		{{ form_end(nouvelleSortieForm) }}

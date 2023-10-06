@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Etat;
 use App\Entity\Sortie;
 use App\Form\ModifSortieType;
+use App\Form\AnnulerSortieType;
 use App\Form\NouvelleSortieType;
 use App\Repository\EtatRepository;
 use App\Repository\SortieRepository;
@@ -16,9 +17,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class SortieController extends AbstractController
 {
-
-
-
     #[Route('/nouvelle-sortie', name: 'nouvelle_sortie')]
     public function ajoutSortie(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -95,6 +93,36 @@ class SortieController extends AbstractController
         $entityManager->flush();
 
         return $this->redirect($this->generateUrl('app_affichage_sorties'));
+    }
+
+    #[Route('/annuler-sortie/{id}', name: 'annuler_sortie')]
+    public function annulSortie(int $id, SortieRepository $sortieRepository, EntityManagerInterface $entityManager, Request $request): Response
+    {   
+
+        $sortie = $sortieRepository->findSortieWithLieu($id);
+
+        if (!$sortie) {
+            throw $this->createNotFoundException("Cette sortie n'existe pas.");
+        }
+
+        $etatRepo = $entityManager->getRepository(Etat::class);
+
+        $annulSortieForm = $this->createForm(AnnulerSortieType::class, $sortie);
+        $annulSortieForm->handleRequest($request);
+
+        if ($annulSortieForm->isSubmitted() && $annulSortieForm->isValid()) {
+
+            $sortie->setEtat($etatRepo->find(7));
+            $entityManager->flush();
+
+            return $this->redirect($this->generateUrl('app_affichage_sorties'));
+        }
+
+        return $this->render('sortie/annuler-sortie.html.twig', [
+            'controller_name' => 'SortieController',
+            'sortie' => $sortie,
+            'annulSortieForm' => $annulSortieForm->createView()
+        ]);
     }
 
     #[Route('/publier-sortie/{id}', name: 'publier_sortie')]
