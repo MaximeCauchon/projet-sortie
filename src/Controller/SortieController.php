@@ -25,15 +25,15 @@ class SortieController extends AbstractController
 
         $currentUser = $this->getUser();
         $sortie->setOrganisateur($currentUser);
+        $etatRepo = $entityManager->getRepository(Etat::class);
+        $sortie->setEtat($etatRepo->find(1));
+        $campus = $this->getUser()->getCampus();
+        $sortie->setCampus($campus);
 
         $nouvelleSortieForm = $this->createForm(NouvelleSortieType::class, $sortie);
         $nouvelleSortieForm->handleRequest($request);
 
-        $etatRepo = $entityManager->getRepository(Etat::class);
-        $sortie->setEtat($etatRepo->find(1));
 
-        $campus = $this->getUser()->getCampus();
-        $sortie->setCampus($campus);
 
         if ($nouvelleSortieForm->isSubmitted() && $nouvelleSortieForm->isValid()) {
 
@@ -42,7 +42,7 @@ class SortieController extends AbstractController
             }
             $entityManager->persist($sortie);
             $entityManager->flush();
-
+			$this->addFlash('success', 'La sortie a été créée.');
             return $this->redirect($this->generateUrl('details_sortie', ['id' => $sortie->getId()]));
         }
 

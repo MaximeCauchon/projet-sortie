@@ -48,54 +48,66 @@ class SortieRepository extends ServiceEntityRepository
        ;
    }
 
-    public function findWithForm($form, $utilisateurConnecte): Sortie
-    {
-        dd($utilisateurConnecte);
+    public function findWithForm($form, $utilisateurConnecte)
+	{
+		dd($utilisateurConnecte);
 
-        $request = $this->createQueryBuilder('s');
+		$request = $this->createQueryBuilder('s');
 
-        // $request->andWhere('s.campus_id  = :val')
-        //     ->setParameter('val', $form.viewData.campus.id);
+		// $request->andWhere('s.campus_id  = :val')
+		//     ->setParameter('val', $form.viewData.campus.id);
 
-        // if ($form.viewData.nom != null) {
-        //     $request->andWhere('s.exampleField = :val')
-        //     ->setParameter('val', $form.viewData.nom);
-        // }
+		// if ($form.viewData.nom != null) {
+		//     $request->andWhere('s.exampleField = :val')
+		//     ->setParameter('val', $form.viewData.nom);
+		// }
 
-        // if ($form.viewData.dateDebut != null) {
-        //     $request->andWhere('s.exampleField = :val')
-        //     ->setParameter('val', $form.viewData.dateDebut);
-        // }
+		// if ($form.viewData.dateDebut != null) {
+		//     $request->andWhere('s.exampleField = :val')
+		//     ->setParameter('val', $form.viewData.dateDebut);
+		// }
 
-        // if ($form.viewData.dateFin != null) {
-        //     $request->andWhere('s.exampleField = :val')
-        //     ->setParameter('val', $form.viewData.dateFin);
-        // }
+		// if ($form.viewData.dateFin != null) {
+		//     $request->andWhere('s.exampleField = :val')
+		//     ->setParameter('val', $form.viewData.dateFin);
+		// }
 
-        // if ($form.viewData.organisateur != false) {
-        //     $request->andWhere('s.organisateur_id = :val')
-        //     ->setParameter('val', $utilisateurConnecte.organise);
-        // }
+		// if ($form.viewData.organisateur != false) {
+		//     $request->andWhere('s.organisateur_id = :val')
+		//     ->setParameter('val', $utilisateurConnecte.organise);
+		// }
 
-        // if ($form.viewData.inscrit != false) {
-        //     $request->andWhere('s.exampleField = :val')
-        //     ->setParameter('val', $form.viewData.inscrit);
-        // }
+		// if ($form.viewData.inscrit != false) {
+		//     $request->andWhere('s.exampleField = :val')
+		//     ->setParameter('val', $form.viewData.inscrit);
+		// }
 
-        // if ($form.viewData.nonInscrit != false) {
-        //     $request->andWhere('s.exampleField = :val')
-        //     ->setParameter('val', $form.viewData.nonInscrit);
-        // }
+		// if ($form.viewData.nonInscrit != false) {
+		//     $request->andWhere('s.exampleField = :val')
+		//     ->setParameter('val', $form.viewData.nonInscrit);
+		// }
 
-        // if ($form.viewData.sortiesPassees != false) {
-        //     $request->andWhere('s.exampleField = :val')
-        //     ->setParameter('val', $form.viewData.sortiesPassees);
-        // }
+		// if ($form.viewData.sortiesPassees != false) {
+		//     $request->andWhere('s.exampleField = :val')
+		//     ->setParameter('val', $form.viewData.sortiesPassees);
+		// }
 
 
-        // ->setMaxResults(10)
+		// ->setMaxResults(10)
 
-        $request->getQuery()
-        ->getResult();        ;
-}
+		 $request->getQuery()
+			->getResult();
+	}
+	public function findSortieWithLieu(int $sortieId)
+	{
+		return $this->createQueryBuilder('s')
+			->select('s', 'l')
+			->leftJoin('s.lieu', 'l')
+			->where('s.id = :sortieId')
+			->setParameter('sortieId', $sortieId)
+			->getQuery()
+			->getOneOrNullResult()
+			;
+
+	}
 }
