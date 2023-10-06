@@ -8,7 +8,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Form\RechercheSortiesType;
 use Symfony\Component\HttpFoundation\Request;
 use App\Repository\SortieRepository;
-use phpDocumentor\Reflection\Types\Boolean;
 
 class AffichageSortiesController extends AbstractController
 {

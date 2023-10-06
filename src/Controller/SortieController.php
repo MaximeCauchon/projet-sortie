@@ -6,6 +6,7 @@ use App\Entity\Etat;
 use App\Entity\Sortie;
 use App\Form\ModifSortieType;
 use App\Form\NouvelleSortieType;
+use App\Repository\EtatRepository;
 use App\Repository\SortieRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,8 +15,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class SortieController extends AbstractController
-{   
-    
+{
+
 
 
     #[Route('/nouvelle-sortie', name: 'nouvelle_sortie')]
@@ -56,7 +57,7 @@ class SortieController extends AbstractController
     public function modifSortie(int $id, SortieRepository $sortieRepository, Request $request, EntityManagerInterface $entityManager): Response
     {
         $sortie = $sortieRepository->findSortieWithLieu($id);
-        
+
         if (!$sortie) {
             throw $this->createNotFoundException("Cette sortie n'existe pas.");
         }
@@ -64,19 +65,16 @@ class SortieController extends AbstractController
         $etatRepo = $entityManager->getRepository(Etat::class);
 
         $modifSortieForm = $this->createForm(ModifSortieType::class, $sortie);
-        $modifSortieForm->handleRequest($request); 
+        $modifSortieForm->handleRequest($request);
 
         if ($modifSortieForm->isSubmitted() && $modifSortieForm->isValid()) {
 
             if ($modifSortieForm->get('supprimer')->isClicked()) {
-                $entityManager->remove($sortie);
-                $entityManager->flush();
-
-                return $this->redirect($this->generateUrl('app_main'));
+                $sortie->supprSortie();
             }
 
             if ($modifSortieForm->get('publier')->isClicked()) {
-                $sortie->setEtat($etatRepo->find(2));
+                $sortie->publierSortie();
             }
             $entityManager->flush();
 
@@ -88,6 +86,24 @@ class SortieController extends AbstractController
             'sortie' => $sortie,
             'modifSortieForm' => $modifSortieForm->createView()
         ]);
+    }
+
+    #[Route('/supprimer-sortie/{id}', name: 'supprimer_sortie')]
+    public function supprSortie(Sortie $sortie, EntityManagerInterface $entityManager): Response
+    {
+        $entityManager->remove($sortie);
+        $entityManager->flush();
+
+        return $this->redirect($this->generateUrl('app_affichage_sorties'));
+    }
+
+    #[Route('/publier-sortie/{id}', name: 'publier_sortie')]
+    public function publierSortie(Sortie $sortie, EntityManagerInterface $entityManager, EtatRepository $etatRepo): Response
+    {
+        $sortie->setEtat($etatRepo->find(2));
+        $entityManager->flush();
+
+        return $this->redirect($this->generateUrl('app_affichage_sorties'));
     }
 
     #[Route('/details-sortie/{id}', name: 'details_sortie')]
