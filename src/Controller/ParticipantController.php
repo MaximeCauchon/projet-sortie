@@ -2,18 +2,20 @@
 
 namespace App\Controller;
 
+use App\Entity\Sortie;
 use App\Entity\Participant;
-use App\Form\EditUserLoggedPasswordType;
 use App\Form\EditUserLoggedType;
+use App\Form\EditUserLoggedPasswordType;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 #[Route('/', name: 'participant_')]
 
@@ -95,4 +97,35 @@ class ParticipantController extends AbstractController
 			'editLoggedUserPasswordForm' => $formEditLoggedUserPassword->createView(),
 		]);
 	}
+
+	#[Route(path: 'inscription/{id}', name: 'inscription')]
+	public function addInscription( Sortie $sortie, EntityManagerInterface $entityManager): RedirectResponse
+	{
+		$participant = $this->getUser();
+
+		if(!$participant->participantInscritSortie($sortie)) {
+			$sortie->addParticipant($participant);
+			$entityManager->persist($sortie);
+            $entityManager->flush();
+		}
+		$this->addFlash('success', 'Vous êtes inscrit à la sortie.');
+		return $this->redirectToRoute('details_sortie', ['id' => $sortie->getId()]);
+
+	}
+
+	#[Route(path: 'desistement/{id}', name: 'desistement')]
+	public function removeInscription(Sortie $sortie, EntityManagerInterface $entityManager): RedirectResponse
+	{
+		$participant = $this->getUser();
+
+		if($participant->participantInscritSortie($sortie)) {
+			$sortie->removeParticipant($participant);
+			$entityManager->persist($sortie);
+            $entityManager->flush();
+		}
+		$this->addFlash('success', 'Vous êtes désinscrit de la sortie.');
+		return $this->redirectToRoute('details_sortie', ['id' => $sortie->getId()]);
+
+	}
+
 }

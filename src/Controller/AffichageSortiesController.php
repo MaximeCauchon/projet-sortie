@@ -12,7 +12,7 @@ use phpDocumentor\Reflection\Types\Boolean;
 
 class AffichageSortiesController extends AbstractController
 {
-    #[Route('/sorties', name: 'app_affichage_sorties')]
+    #[Route('/', name: 'app_affichage_sorties')]
     public function index(Request $request, SortieRepository $sortiesRepository): Response
     {
         $rechercheForm = $this->createForm(RechercheSortiesType::class);

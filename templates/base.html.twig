@@ -21,7 +21,7 @@
         <nav>
             <ul class="flex space-x-5 list-none">
                 {% if app.user %}
-                    <li><a href="{{ path("app_main") }}">Accueil</a></li>
+                    <li><a href="{{ path("app_affichage_sorties") }}">Accueil</a></li>
                     <li><a href="{{ path("nouvelle_sortie") }}">Créer une sortie</a></li>
                     {% if is_granted("ROLE_ADMIN") %}
                         <li><a href="{{ path('admin_gestionParticipants') }}" title="Gestion des Participants">Gestion

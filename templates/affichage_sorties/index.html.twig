@@ -4,6 +4,7 @@
 
 {% block body %}
 
+{# TODO cas admin, affichage des options #}
 
 <body class="example-wrapper">
     <div>
@@ -42,14 +43,15 @@
                     </td>
                     <td>{{ sortie.organisateur.prenom }} {{ sortie.organisateur.nom }}</td>
                     <td>
-                        {% if sortie.etat.libelle != "Créée" %}<a href="">Afficher </a>{% endif %}
+                        {% if sortie.etat.libelle != ["Créée", "Archivée"] %}<a href="details-sortie/{{sortie.id}}">Afficher </a>{% endif %}
+                        {% if sortie.etat.libelle == "Ouverte" and not app.user.participantInscritSortie(sortie) %}<a href="inscription/{{sortie.id}}">S'inscrire </a>{% endif %}
                         {% if 
                             app.user.participantInscritSortie(sortie) 
                             and (sortie.etat.libelle == "Créée"
                                 or sortie.etat.libelle == "Ouverte"
                                 or sortie.etat.libelle == "Clôturée"
                                 ) 
-                        %}<a href="">Se désister </a>{% endif %}
+                        %}<a href="desistement/{{sortie.id}}">Se désister </a>{% endif %}
                         {% if sortie.etat.libelle == "Créée" and app.user.participantOrganisateurSortie(sortie)%}
                         <a href="">Modifier </a>
                         <a href="">Publier </a>
