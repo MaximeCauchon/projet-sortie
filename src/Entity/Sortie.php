@@ -224,4 +224,9 @@ class Sortie
 
         return $this;
     }
+
+    public function nombreInscrit(): int
+    {
+        return count($this->getParticipants());
+    }
 }

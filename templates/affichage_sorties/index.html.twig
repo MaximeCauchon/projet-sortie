@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AffichageSortiesController!{% endblock %}
+
+{% block body %}
+
+
+<body class="example-wrapper">
+    <div>
+        <p>date du jour: {{ "now"|date("m/d/Y") }}</p>
+        <p>Participant: {{ app.user.prenom }} {{ app.user.prenom|first|upper }}.</p>
+    </div>
+    <div>
+        {{ form_errors(rechercheForm) }}
+        {{ form_start(rechercheForm) }}
+        {{ form_widget(rechercheForm) }}
+        {{ form_end(rechercheForm) }}
+    </div>
+    <div>
+        <table>
+            <tr>
+                <th>Nom de la sortie</th>
+                <th>Date de la sortie</th>
+                <th>Clôture</th>
+                <th>Inscrits/places</th>
+                <th>Etat</th>
+                <th>Inscrit</th>
+                <th>Organisateur</th>
+                <th>Actions</th>
+            </tr>
+            {% for sortie in sorties %}
+                <tr>
+                    <td>{{ sortie.nom }}</td>
+                    <td>{{ sortie.dateHeureDebut|date('d/m : h:m') }}</td>
+                    <td>{{ sortie.dateLimiteInscription|date('d/m') }}</td>
+                    <td>{{ sortie.nombreInscrit()}}/{{ sortie.nbInscriptionMax }}</td>
+                    <td>{{ sortie.etat.libelle }}</td>
+                    <td>
+                        {% if app.user.participantInscritSortie(sortie) %}
+                            X
+                        {% endif %}
+                    </td>
+                    <td>{{ sortie.organisateur.prenom }} {{ sortie.organisateur.nom }}</td>
+                    <td>
+                        {% if sortie.etat.libelle != "Créée" %}<a href="">Afficher </a>{% endif %}
+                        {% if 
+                            app.user.participantInscritSortie(sortie) 
+                            and (sortie.etat.libelle == "Créée"
+                                or sortie.etat.libelle == "Ouverte"
+                                or sortie.etat.libelle == "Clôturée"
+                                ) 
+                        %}<a href="">Se désister </a>{% endif %}
+                        {% if sortie.etat.libelle == "Créée" and app.user.participantOrganisateurSortie(sortie)%}
+                        <a href="">Modifier </a>
+                        <a href="">Publier </a>
+                        {% endif %}
+                        {% if 
+                            (sortie.etat.libelle == "Créée" 
+                                or sortie.etat.libelle == "Ouverte" 
+                                or sortie.etat.libelle == "Clôturée"
+                            )
+                            and app.user.participantOrganisateurSortie(sortie)
+                        %}
+                        <a href="">Annuler </a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <a href="">Créer une sortie</a>
+</body>
+{% endblock %}
