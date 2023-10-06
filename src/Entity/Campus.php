@@ -6,6 +6,8 @@ use App\Repository\CampusRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 #[ORM\Entity(repositoryClass: CampusRepository::class)]
 class Campus
@@ -16,7 +18,9 @@ class Campus
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $nom = null;
+	#[Assert\NotBlank(message:"Veuillez renseigner un nom au campus !")]
+	#[Assert\Unique(message:"Ce nom existe déjà")]
+	private ?string $nom = null;
 
     #[ORM\OneToMany(mappedBy: 'campus', targetEntity: Participant::class)]
     private Collection $participants;

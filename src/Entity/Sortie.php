@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: SortieRepository::class)]
 class Sortie
@@ -17,18 +18,24 @@ class Sortie
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+	#[Assert\NotBlank(message:"Veuillez renseigner un nom pour cette sortie !")]
     private ?string $nom = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $dateHeureDebut = null;
+	#[Assert\NotBlank(message:"Veuillez renseigner une date de début pour cette sortie !")]
+	private ?\DateTimeInterface $dateHeureDebut = null;
 
     #[ORM\Column]
-    private ?\DateInterval $duree = null;
+	#[Assert\NotBlank(message:"Veuillez renseigner une durée cette sortie !")]
+	private ?\DateInterval $duree = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $dateLimiteInscription = null;
+	#[Assert\NotBlank(message:"Veuillez renseigner une date limité d'inscription pour cette sortie !")]
+	#[Assert\LessThanOrEqual(propertyPath: 'dateHeureDebut', message:'Attention on ne doit pas pouvoir s\'insrire après le début de l\'évènement')]
+	private ?\DateTimeInterface $dateLimiteInscription = null;
 
     #[ORM\Column(type: Types::SMALLINT, nullable: true)]
+	#[Assert\Positive(message:'Ce chiffre ne peut être négatif ou egal à 0. Si vous ne souhaitez pas mettre de limite, ne remplissez pas le champ.')]
     private ?int $nbInscriptionMax = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -46,15 +53,18 @@ class Sortie
 
     #[ORM\ManyToOne(inversedBy: 'sorties')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Etat $etat = null;
+	#[Assert\NotBlank(message:"Veuillez renseigner un état pour cette sortie !")]
+	private ?Etat $etat = null;
 
     #[ORM\ManyToOne(inversedBy: 'sorties')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Lieu $lieu = null;
+	#[Assert\NotBlank(message:"Veuillez renseigner un lieu pour cette sortie !")]
+	private ?Lieu $lieu = null;
 
     #[ORM\ManyToOne(inversedBy: 'sorties')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Campus $campus = null;
+	#[Assert\NotBlank(message:"Veuillez renseigner un campus pour cette sortie !")]
+	private ?Campus $campus = null;
 
     public function __construct()
     {
