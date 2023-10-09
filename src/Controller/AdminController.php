@@ -2,10 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\Campus;
 use App\Entity\Participant;
 use App\Entity\Ville;
+use App\Form\CampusType;
 use App\Form\RegistrationFormType;
 use App\Form\VilleType;
+use App\Repository\CampusRepository;
 use App\Repository\EtatRepository;
 use App\Repository\ParticipantRepository;
 use App\Repository\VilleRepository;
@@ -19,6 +22,7 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/admin', name: 'admin_')]
 class AdminController extends AbstractController
 {
+	// ------------------- Gestion Villes -------------------
 	#[Route('/gestionVilles', name: 'gestionVilles')]
 	public function gestionVilles(Request $request, VilleRepository $villeRepo, EntityManagerInterface $entityManager): Response
 	{
@@ -74,15 +78,8 @@ class AdminController extends AbstractController
 		return $this->redirectToRoute('admin_gestionVilles');
 	}
 
-	#[Route('/gestionCampus', name: 'gestionCampus')]
-	public function gestionCampus(): Response
-	{
-		return $this->render('admin/gestionCampus.html.twig', [
-			'controller_name' => 'AdminController',
-		]);
-	}
 
-
+// ------------------- Gestion Participants -------------------
 	#[Route('/gestionParticipants', name: 'gestionParticipants')]
 	public function gestionParticipants(ParticipantRepository $partRepo): Response
 	{
@@ -96,7 +93,7 @@ class AdminController extends AbstractController
 	#[Route(path: '/gestionParticipants/isActif/{id}', name: 'gestionParticipants_isActif')]
 	public function gestionParticipants_isActif(Participant $p, Request $request, EntityManagerInterface $entityManager, EtatRepository $etatRepo)
 	{
-		if ($p->isIsActif()){
+		if ($p->isIsActif()) {
 			$message = $p->desinscriptionDeTousLesEvenementsFuturs();
 			if ($message != "") {
 				$this->addFlash('success', $message);
@@ -153,5 +150,63 @@ class AdminController extends AbstractController
 		$entityManager->flush();
 		$this->addFlash('success', 'Le participant ' . $p->getPseudo() . "a été supprimé.");
 		return $this->redirectToRoute('admin_gestionParticipants');
+	}
+
+// ------------------- Gestion Campus -------------------
+
+	#[Route('/gestionCampus', name: 'gestionCampus')]
+	public function gestionCampus(Request $request, CampusRepository $campusRepo, EntityManagerInterface $entityManager): Response
+	{
+		$newCampus = new Campus();
+		$newCampusForm =$this->createForm(CampusType::class, $newCampus);
+		$newCampusForm->handleRequest($request);
+		if ($newCampusForm->isSubmitted() && $newCampusForm->isValid()) {
+			$entityManager->persist($newCampus);
+			$entityManager->flush();
+		}
+		$newCampus = new Campus();
+		$newCampusForm =$this->createForm(CampusType::class, $newCampus);
+		$campus = $campusRepo->findBy([], ['nom' => 'ASC']);
+
+		return $this->render('admin/gestionCampus.html.twig', [
+			'campus' => $campus,
+			'newCampusForm' => $newCampusForm,
+			'monCampusAModifier' => null,
+			'editCampusForm' => null
+		]);
+	}
+
+	#[Route(path: '/gestionCampus/edit/{id}', name: 'gestionCampus_Edit')]
+	public function gestionCampus_Edit(Campus $monCampusAModifier, Request $request, CampusRepository $campusRepo, EntityManagerInterface $entityManager): Response
+	{
+		$campus = $campusRepo->findBy([], ['nom' => 'ASC']);
+		$editCampusForm = $this->createForm(CampusType::class,$monCampusAModifier);
+
+		$editCampusForm->handleRequest($request);
+		if ($editCampusForm->isSubmitted() && $editCampusForm->isValid()) {
+			$entityManager->persist($monCampusAModifier);
+			$entityManager->flush();
+			$this->addFlash('success', 'Le campus ' . $monCampusAModifier->getNom() . ' a bien été modifié.');
+			return $this->redirectToRoute('admin_gestionCampus');
+		}
+		return $this->render('admin/gestionCampus.html.twig', [
+			'campus' => $campus,
+			'newCampusForm' => null,
+			'monCampusAModifier' => $monCampusAModifier,
+			'editCampusForm' => $editCampusForm
+		]);
+	}
+
+	#[Route(path: '/gestionCampus/supp/{id}', name: 'gestionCampus_Supp')]
+	public function gestionCampus_Supp(Campus $monCampusASupprimer, Request $request, CampusRepository $campusRepo, EntityManagerInterface $entityManager)
+	{
+		if ($monCampusASupprimer->getParticipants()->count() > 0) {
+			$this->addFlash('warning', 'Le campus ' . $monCampusASupprimer->getNom() . ' ne peut être supprimée car des participants y sont associés (' . $monCampusASupprimer->getParticipants()->count() . ').');
+		} else {
+			$entityManager->remove($monCampusASupprimer);
+			$entityManager->flush();
+			$this->addFlash('success', 'La campus ' . $monCampusASupprimer->getNom() . ' a bien été supprimé.');
+		}
+		return $this->redirectToRoute('admin_gestionCampus');
 	}
 }

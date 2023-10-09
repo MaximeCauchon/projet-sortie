@@ -5,7 +5,48 @@
 {% block body %}
     <div class="container mx-auto px-4">
         <h1>Gestion des Campus</h1>
-        <p>TODO</p>
+        <table class="table-auto">
+            <thead>
+            <tr>
+                <th>Campus</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for c in campus %}
+                {% if monCampusAModifier and c.id == monCampusAModifier.id %}
+                    {{ form_start(editCampusForm) }}
+                    <tr>
+                        <td> {{ form_widget(editCampusForm.nom) }}</td>
+                        <td>
+                            <button>Modifier</button>
+                            <a href="{{ path('admin_gestionCampus') }}">Annuler</a>
+                        </td>
+                    </tr>
+                    {{ form_end(editCampusForm) }}
+                {% else %}
+                    <tr>
+                        <td>{{ c.nom }}</td>
+                        <td>
+                            <a href="{{ path('admin_gestionCampus_Edit', {'id' : c.id}) }}">Modifier</a>
+                            <a href="{{ path('admin_gestionCampus_Supp', {'id' : c.id}) }}">Supprimer</a>
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
 
+            {% if newCampusForm %}
+                {{ form_start(newCampusForm) }}
+                <tr>
+                    <td> {{ form_widget(newCampusForm.nom) }}</td>
+                    <td>
+                        <button>Créer</button>
+                    </td>
+                </tr>
+                {{ form_end(newCampusForm) }}
+            {% endif %}
+
+            </tbody>
+        </table>
     </div>
 {% endblock %}
