@@ -6,7 +6,9 @@ namespace App\Form;
 use App\Entity\Lieu;
 use App\Entity\Ville;
 use App\Entity\Sortie;
-use App\Repository\LieuRepository;;
+use App\Repository\LieuRepository;
+
+;
 
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -25,73 +27,72 @@ use Symfony\Component\Form\Extension\Core\Type\DateIntervalType;
 
 class NouvelleSortieType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options): void
-    {
+	public function buildForm(FormBuilderInterface $builder, array $options): void
+	{
 
-        $builder
-            ->add('nom', TextType::class, [
-                'label' => 'Nom de la sortie :'
-            ])
-            ->add('dateHeureDebut', DateTimeType::class, [
-                'label' => 'Date et heure de la sortie :'
-            ])
-            ->add('dateLimiteInscription', DateTimeType::class, [
-                'label' => "Date limite d'inscription :"
-            ])
-            ->add('nbInscriptionMax', IntegerType::class, [
-                'label' => 'Nombre de places :'
-            ])
-            ->add('duree', DateIntervalType::class, [
-                'label' => 'Durée :',
-                'with_years'  => false,
-                'with_months' => false,
-                'with_days'   => false,
-                'with_minutes'  => true,
-                'labels' => [
-                    'minutes' => "minutes",
-                ]
-            ])
-            ->add('infosSortie', TextType::class, [
-                'label' => 'Descriptions et infos :'
-            ])
-            ->add('ville', EntityType::class, [
-                'label' => 'Ville :',
-                'class' => Ville::class,
-                'choice_label' => 'nom',
-                'mapped' => false
-            ]);
+		$builder
+			->add('nom', TextType::class, [
+				'label' => 'Nom de la sortie :'
+			])
+			->add('dateHeureDebut', DateTimeType::class, [
+				'html5' => true,
+				'date_widget' => 'single_text',
+				'label' => 'Date et heure de la sortie :'
+			])
+			->add('dateLimiteInscription', DateTimeType::class, [
+				'html5' => true,
+				'date_widget' => 'single_text',
+				'label' => "Date limite d'inscription :"
+			])
+			->add('nbInscriptionMax', IntegerType::class, [
+				'required' => false,
+				'label' => 'Nombre de places :',
+				'attr' => [
+					'min' => 1,
+					'minMessage' => 'Ce chiffre ne peut être négatif ou egal à 0. Si vous ne souhaitez pas mettre de limite, ne remplissez pas le champ.',
+				]
+			])
+			->add('duree', DateIntervalType::class, [
+				'label' => 'Durée :',
+				'with_years' => false,
+				'with_months' => false,
+				'with_days' => false,
+//				'days' => range(0,30),
+				'with_hours' => false,
+//				'hours' => range(0,24),
+				'with_minutes' => true,
+				'minutes' => range(0, 120),
+				'labels' => [
+					'minutes' => "minutes",
+//					'days' => "jours",
+//					'hours' => "heures",
+				]
+			])
+			->add('infosSortie', TextType::class, [
+				'required' => false,
+				'label' => 'Descriptions et infos :'
+			])
+			->add('ville', EntityType::class, [
+				'label' => 'Ville :',
+				'class' => Ville::class,
+				'choice_label' => 'nom',
+				'placeholder' => '',
+				'mapped' => false
+			])
+			->add('lieu', EntityType::class, [
+				'class' => Lieu::class,
+				'label' => 'Lieu :',
+				'choice_label' => 'nom',
+				'placeholder' => '',
+			])
+			->add('enregistrer', SubmitType::class, ['label' => 'Enregistrer'])
+			->add('publier', SubmitType::class, ['label' => 'Publier']);
+	}
 
-        $formModifier = function (FormInterface $form, Ville $ville = null): void {
-            $lieux = null === $ville ? [] : $ville->getLieux();
-            dump($lieux);
-
-            $form->add('lieu', EntityType::class, [
-                'class' => Lieu::class,
-                'label' => 'Lieu :',
-                'class' => Lieu::class,
-                'choice_label' => 'nom',
-                'placeholder' => '',
-                'choices' => $lieux
-            ]);
-        };
-
-        $builder->get('ville')->addEventListener(
-            FormEvents::POST_SUBMIT,
-            function (FormEvent $event) use ($formModifier): void {
-                $ville = $event->getForm()->getData();
-                $formModifier($event->getForm()->getParent(), $ville);
-            }
-        );
-
-        $builder
-            ->add('enregistrer', SubmitType::class, ['label' => 'Enregistrer'])
-            ->add('publier', SubmitType::class, ['label' => 'Publier']);
-    }
-
-    public function configureOptions(OptionsResolver $resolver): void
-    {
-        $resolver->setDefaults([
-            'data_class' => Sortie::class,
-        ]);
-    }
+	public function configureOptions(OptionsResolver $resolver): void
+	{
+		$resolver->setDefaults([
+			'data_class' => Sortie::class,
+		]);
+	}
 }

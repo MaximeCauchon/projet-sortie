@@ -14,30 +14,29 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 
 #[Route('/admin', name: 'admin_')]
-
 class RegistrationController extends AbstractController
 {
-    #[Route('/admin/register', name: 'app_register')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, AppAuthenticator $authenticator, EntityManagerInterface $entityManager): Response
-    {
-        $user = new Participant();
+	#[Route('/admin/register', name: 'register')]
+	public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, AppAuthenticator $authenticator, EntityManagerInterface $entityManager): Response
+	{
+		$user = new Participant();
 		$user->setIsActif(true);
 
-        $form = $this->createForm(RegistrationFormType::class, $user);
-        $form->handleRequest($request);
+		$form = $this->createForm(RegistrationFormType::class, $user);
+		$form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            // encode the plain password
-            $user->setPassword(
-                $userPasswordHasher->hashPassword(
-                    $user,
-                    $form->get('plainPassword')->getData()
-                )
-            );
+		if ($form->isSubmitted() && $form->isValid()) {
+			// encode the plain password
+			$user->setPassword(
+				$userPasswordHasher->hashPassword(
+					$user,
+					$form->get('plainPassword')->getData()
+				)
+			);
 
-            $entityManager->persist($user);
-            $entityManager->flush();
-            // do anything else you need here, like send an email
+			$entityManager->persist($user);
+			$entityManager->flush();
+			// do anything else you need here, like send an email
 
 			//Si on veut s'authentifier imédiatement après avoir créé l'utilisateur
 //            return $userAuthenticator->authenticateUser(
@@ -45,17 +44,19 @@ class RegistrationController extends AbstractController
 //                $authenticator,
 //                $request
 //            );
-			$user = new Participant();
-			$user->setIsActif(true);
+			$newUser = new Participant();
+			$newUser->setIsActif(true);
 
-			$form = $this->createForm(RegistrationFormType::class, $user);
+			$form = $this->createForm(RegistrationFormType::class, $newUser);
+			$this->addFlash('success', 'Le participant ' . $user->getPseudo() . 'a été créé.');
+
 			return $this->render('registration/register.html.twig', [
 				'registrationForm' => $form->createView(),
 			]);
-        }
+		}
 
-        return $this->render('registration/register.html.twig', [
-            'registrationForm' => $form->createView(),
-        ]);
-    }
+		return $this->render('registration/register.html.twig', [
+			'registrationForm' => $form->createView(),
+		]);
+	}
 }

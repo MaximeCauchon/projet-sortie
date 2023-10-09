@@ -1,73 +1,101 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello AffichageSortiesController!{% endblock %}
+{% block title %}Hello AffichageSortiesController!
+{% endblock %}
 
 {% block body %}
 
+	{# TODO cas admin, affichage des options #}
 
-<body class="example-wrapper">
-    <div>
-        <p>date du jour: {{ "now"|date("m/d/Y") }}</p>
-        <p>Participant: {{ app.user.prenom }} {{ app.user.prenom|first|upper }}.</p>
-    </div>
-    <div>
-        {{ form_errors(rechercheForm) }}
-        {{ form_start(rechercheForm) }}
-        {{ form_widget(rechercheForm) }}
-        {{ form_end(rechercheForm) }}
-    </div>
-    <div>
-        <table>
-            <tr>
-                <th>Nom de la sortie</th>
-                <th>Date de la sortie</th>
-                <th>Clôture</th>
-                <th>Inscrits/places</th>
-                <th>Etat</th>
-                <th>Inscrit</th>
-                <th>Organisateur</th>
-                <th>Actions</th>
-            </tr>
-            {% for sortie in sorties %}
-                <tr>
-                    <td>{{ sortie.nom }}</td>
-                    <td>{{ sortie.dateHeureDebut|date('d/m : h:m') }}</td>
-                    <td>{{ sortie.dateLimiteInscription|date('d/m') }}</td>
-                    <td>{{ sortie.nombreInscrit()}}/{{ sortie.nbInscriptionMax }}</td>
-                    <td>{{ sortie.etat.libelle }}</td>
-                    <td>
-                        {% if app.user.participantInscritSortie(sortie) %}
-                            X
-                        {% endif %}
-                    </td>
-                    <td>{{ sortie.organisateur.prenom }} {{ sortie.organisateur.nom }}</td>
-                    <td>
-                        {% if sortie.etat.libelle != "Créée" %}<a href="">Afficher </a>{% endif %}
-                        {% if 
-                            app.user.participantInscritSortie(sortie) 
-                            and (sortie.etat.libelle == "Créée"
-                                or sortie.etat.libelle == "Ouverte"
-                                or sortie.etat.libelle == "Clôturée"
-                                ) 
-                        %}<a href="">Se désister </a>{% endif %}
-                        {% if sortie.etat.libelle == "Créée" and app.user.participantOrganisateurSortie(sortie)%}
-                        <a href="">Modifier </a>
-                        <a href="">Publier </a>
-                        {% endif %}
-                        {% if 
-                            (sortie.etat.libelle == "Créée" 
-                                or sortie.etat.libelle == "Ouverte" 
-                                or sortie.etat.libelle == "Clôturée"
-                            )
+	<main class="container flex flex-col px-12 m-4 space-y-4">
+		<div>
+			<p>date du jour:
+				{{ "now"|date("m/d/Y") }}</p>
+			<p>Participant:
+				{{ app.user.prenom }}
+				{{ app.user.prenom|first|upper }}.</p>
+		</div>
+		<div class="space-y-2">
+			{{ form_errors(rechercheForm) }}
+			{{ form_start(rechercheForm) }}
+			{{ form_widget(rechercheForm) }}
+			{{ form_end(rechercheForm) }}
+		</div>
+		<div>
+			<table class="my-3 border-collapse border-2 border-slate-700">
+				<thead class=" bg-slate-600 text-white">
+					<tr>
+						<th class="p-2 border-2 border-slate-700">Nom de la sortie</th>
+						<th class="p-2 border-2 border-slate-700">Date de la sortie</th>
+						<th class="p-2 border-2 border-slate-700">Clôture</th>
+						<th class="p-2 border-2 border-slate-700">Inscrits/places</th>
+						<th class="p-2 border-2 border-slate-700">Etat</th>
+						<th class="p-2 border-2 border-slate-700">Inscrit</th>
+						<th class="p-2 border-2 border-slate-700">Organisateur</th>
+						<th class="p-2 border-2 border-slate-700">Actions</th>
+					</tr>
+				</thead>
+				<tbody class="text-center">
+					{% for sortie in sorties %}
+						<tr>
+							<td class="p-2 border border-slate-400">{{ sortie.nom }}</td>
+							<td class="p-2 border border-slate-400">{{ sortie.dateHeureDebut|date('d/m : h:m') }}</td>
+							<td class="p-2 border border-slate-400">{{ sortie.dateLimiteInscription|date('d/m') }}</td>
+							<td class="p-2 border border-slate-400">{{ sortie.nombreInscrit()}}/{{ sortie.nbInscriptionMax }}</td>
+							<td class="p-2 border border-slate-400">{{ sortie.etat.libelle }}</td>
+							<td class="p-2 border border-slate-400 text-center">
+								{% if app.user.participantInscritSortie(sortie) %}
+									X
+								{% endif %}
+							</td>
+							<td class="p-2 border border-slate-400">
+								<a href="{{path('participant_details', {id : sortie.organisateur.id})}}">
+									{{ sortie.organisateur.prenom }}
+									{{ sortie.organisateur.nom }}
+								</a>
+							</td>
+							<td class="p-2 border border-slate-400 space-x-6">
+								{% if sortie.etat.libelle not in ["Créée", "Historisée"] %}
+									<a href="{{path('details_sortie', {id : sortie.id})}}">Afficher
+									</a>
+								{% endif %}
+								{% if not app.user.participantOrganisateurSortie(sortie) %}
+									{% if sortie.etat.libelle == "Ouverte" and not app.user.participantInscritSortie(sortie) %}
+										<a href="{{path('participant_inscription', {id : sortie.id})}}">S'inscrire
+										</a>
+									{% endif %}
+									{% if app.user.participantInscritSortie(sortie) 
+                            and sortie.etat.libelle in ["Ouverte", "Clôturée"] %}
+										<a href="{{path('participant_desistement', {id : sortie.id})}}">Se désister
+										</a>
+									{% endif %}
+								{% endif %}
+
+
+								{% if sortie.etat.libelle == "Créée" and app.user.participantOrganisateurSortie(sortie)%}
+									<a href="{{path('modifier_sortie', {id : sortie.id})}}">Modifier
+									</a>
+									<a href="{{path('publier_sortie', {id : sortie.id})}}">Publier
+									</a>
+									<a href="{{path('supprimer_sortie', {id : sortie.id})}}">Supprimer
+									</a>
+								{% endif %}
+								{% if 
+                            sortie.etat.libelle in ["Ouverte", "Clôturée"]
                             and app.user.participantOrganisateurSortie(sortie)
                         %}
-                        <a href="">Annuler </a>
-                        {% endif %}
-                    </td>
-                </tr>
-            {% endfor %}
-        </table>
-    </div>
-    <a href="">Créer une sortie</a>
-</body>
+									<a href="{{path('annuler_sortie', {id : sortie.id})}}">Annuler
+									</a>
+								{% endif %}
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+
+			</table>
+		</div>
+		<div class="my-4">
+		<a class="bg-slate-600 border w-fit px-4 py-2 text-slate-100 shadow-slate-700 shadow-lg" href="{{ path("nouvelle_sortie") }}">Créer une sortie</a>
+		</div>
+	</main>
 {% endblock %}

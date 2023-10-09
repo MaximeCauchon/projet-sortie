@@ -40,32 +40,49 @@ class ModifSortieType extends AbstractType
                 'label' => 'Nom de la sortie :'
             ])
             ->add('dateHeureDebut', DateTimeType::class, [
-                'label' => 'Date et heure de la sortie :'
+				'html5' => true,
+				'date_widget' => 'single_text',
+				'label' => 'Date et heure de la sortie :'
             ])
             ->add('dateLimiteInscription', DateTimeType::class, [
-                'label' => "Date limite d'inscription :"
+				'html5' => true,
+				'date_widget' => 'single_text',
+				'label' => "Date limite d'inscription :"
             ])
             ->add('nbInscriptionMax', IntegerType::class, [
-                'label' => 'Nombre de places :'
+				'required' => false,
+				'label' => 'Nombre de places :',
+				'attr' => [
+					'min' => 1,
+					'minMessage' => 'Ce chiffre ne peut être négatif ou egal à 0. Si vous ne souhaitez pas mettre de limite, ne remplissez pas le champ.',
+				]
             ])
             ->add('duree', DateIntervalType::class, [
-                'label' => 'Durée :',
-                'with_years'  => false,
-                'with_months' => false,
-                'with_days'   => false,
-                'with_minutes'  => true,
-                'labels' => [
-                    'minutes' => "minutes",
-                ]
+				'label' => 'Durée :',
+				'with_years' => false,
+				'with_months' => false,
+				'with_days' => false,
+//				'days' => range(0,30),
+				'with_hours' => false,
+//				'hours' => range(0,24),
+				'with_minutes' => true,
+				'minutes' => range(0, 120),
+				'labels' => [
+					'minutes' => "minutes",
+//					'days' => "jours",
+//					'hours' => "heures",
+				]
             ])
             ->add('infosSortie', TextType::class, [
-                'label' => 'Descriptions et infos :'
+				'required' => false,
+				'label' => 'Descriptions et infos :'
             ])
             
             ->add('lieu', EntityType::class, [
-                'label' => 'Lieu :',
-                'class' => Lieu::class,
-                'choice_label' => 'nom',
+				'class' => Lieu::class,
+				'label' => 'Lieu :',
+				'choice_label' => 'nom',
+				'placeholder' => '',
             ])
             ->add('enregistrer', SubmitType::class, ['label' => 'Enregistrer'])
             ->add('publier', SubmitType::class, ['label' => 'Publier'])

@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	- Annuler une sortie.
+{% endblock %}
+
+{% block body %}
+	<main class="flex flex-col">
+		<h1 class=" text-center my-5">
+			Annuler une sortie
+		</h1>
+
+		{{ form_start(annulSortieForm) }}
+		<div class="flex flex-col justify-center items-center">
+			<div class="space-y-3">
+				<p>
+					Nom de la sortie :
+					{{sortie.nom}}
+				</p>
+				<p>Date de la sortie :
+					{{ sortie.dateHeureDebut | date("d/m/Y", "Europe/Paris") }}</p>
+				<p>Campus :
+					{{ sortie.campus.nom }}
+				</p>
+				<p>
+					Lieu :
+					{{sortie.lieu.rue}}
+					{{sortie.lieu.ville.codePostal}}
+					{{sortie.lieu.ville.nom}}
+				</p>
+				{{ form_row(annulSortieForm.motifAnnulation) }}
+			</div>
+		</div>
+
+		<div class="flex mt-12 space-x-6 justify-center">
+			{{ form_row(annulSortieForm.enregistrer, { 'attr': {'class': 'border-2 border-black px-3 py-1 shadow-md shadow-slate-950'}}) }}
+
+			<a href="{{path('app_affichage_sorties') }}" class="border-2 border-black px-3 py-1 shadow-md shadow-slate-950">Annuler</a>
+		</div>
+
+		{{ form_end(annulSortieForm) }}
+
+	</main>
+{% endblock %}

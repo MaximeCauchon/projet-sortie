@@ -12,8 +12,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ParticipantRepository::class)]
-#[UniqueEntity(fields: ['email'], message: 'Il existe déjà un compte avec cet email')]
-#[UniqueEntity(fields: ['pseudo'], message: 'Ce pseudo est déjà pris')]
+#[UniqueEntity(fields: ['email'], message: 'Il existe déjà un compte avec cet email.')]
+#[UniqueEntity(fields: ['pseudo'], message: 'Ce pseudo est déjà pris.')]
 class Participant implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -22,7 +22,12 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    private ?string $email = null;
+	#[Assert\NotBlank(message:"Veuillez renseigner un email pour ce participant !")]
+	#[Assert\Email(
+		message: 'L\'email {{ value }} n\'est pas valide.',
+	)]
+	#[Assert\Type('string')]
+	private ?string $email = null;
 
     #[ORM\Column]
     private array $roles = [];
@@ -31,24 +36,32 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column]
-    private ?string $password = null;
+	#[Assert\Type('string')]
+	private ?string $password = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $nom = null;
+	#[Assert\NotBlank(message:"Veuillez renseigner un nom pour ce participant !")]
+	#[Assert\Type('string')]
+	private ?string $nom = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $prenom = null;
+	#[Assert\NotBlank(message:"Veuillez renseigner un prénom pour ce participant !")]
+	#[Assert\Type('string')]
+	private ?string $prenom = null;
 
     #[ORM\Column(length: 50, nullable: true)]
-    private ?string $telephone = null;
+	#[Assert\Type('string')]
+	private ?string $telephone = null;
 
     #[ORM\Column]
+	#[Assert\NotBlank(message:"Veuillez renseigner si le participant est actif ou non !")]
     private ?bool $isActif = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
 
     #[ORM\Column(length: 255)]
+	#[Assert\NotBlank(message:"Veuillez renseigner un pseudo pour ce participant !")]
     private ?string $pseudo = null;
 
     #[ORM\ManyToMany(targetEntity: Sortie::class, inversedBy: 'participants')]
@@ -59,6 +72,7 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\ManyToOne(inversedBy: 'participants')]
     #[ORM\JoinColumn(nullable: false)]
+	#[Assert\NotBlank(message:"Veuillez renseigner un campus pour ce participant !")]
     private ?Campus $campus = null;
 
     public function __construct()

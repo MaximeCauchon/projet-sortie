@@ -6,8 +6,11 @@ use App\Repository\EtatRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: EtatRepository::class)]
+#[UniqueEntity(fields: ['libelle'])]
 class Etat
 {
     #[ORM\Id]
@@ -16,7 +19,9 @@ class Etat
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $libelle = null;
+	#[Assert\NotBlank(message:"Veuillez renseigner un libellé pour cet état !")]
+	#[Assert\Unique(message:"Ce libellé existe déjà")]
+	private ?string $libelle = null;
 
     #[ORM\OneToMany(mappedBy: 'etat', targetEntity: Sortie::class)]
     private Collection $sorties;

@@ -5,7 +5,52 @@
 {% block body %}
     <div class="container mx-auto px-4">
         <h1>Gestion des Villes</h1>
-        <p>TODO</p>
+        <table class="table-auto">
+            <thead>
+            <tr>
+                <th>Ville</th>
+                <th>Code Postal</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for v in villes %}
+                {% if maVilleAModifier and v.id == maVilleAModifier.id %}
+                    {{ form_start(editVilleForm) }}
+                    <tr>
+                        <td> {{ form_widget(editVilleForm.nom) }}</td>
+                        <td> {{ form_widget(editVilleForm.codePostal) }}</td>
+                        <td>
+                            <button>Modifier</button>
+                            <a href="{{ path('admin_gestionVilles') }}">Annuler</a>
+                        </td>
+                    </tr>
+                    {{ form_end(editVilleForm) }}
+                {% else %}
+                    <tr>
+                        <td>{{ v.nom }}</td>
+                        <td>{{ v.codePostal }}</td>
+                        <td>
+                            <a href="{{ path('admin_gestionVilles_Edit', {'id' : v.id}) }}">Modifier</a>
+                            <a href="{{ path('admin_gestionVilles_Supp', {'id' : v.id}) }}">Supprimer</a>
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
 
+            {% if newVilleForm %}
+                {{ form_start(newVilleForm) }}
+                <tr>
+                    <td> {{ form_widget(newVilleForm.nom) }}</td>
+                    <td> {{ form_widget(newVilleForm.codePostal) }}</td>
+                    <td>
+                        <button>Créer</button>
+                    </td>
+                </tr>
+                {{ form_end(newVilleForm) }}
+            {% endif %}
+
+            </tbody>
+        </table>
     </div>
 {% endblock %}
