@@ -103,7 +103,7 @@ class ParticipantController extends AbstractController
 	{
 		$participant = $this->getUser();
 
-		if(!$participant->participantInscritSortie($sortie)) {
+		if(!$participant->participantInscritSortie($sortie) && $sortie->getEtat()->getId()==2) {
 			$sortie->addParticipant($participant);
 			$entityManager->persist($sortie);
             $entityManager->flush();

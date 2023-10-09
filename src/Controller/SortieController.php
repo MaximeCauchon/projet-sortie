@@ -44,7 +44,7 @@ class SortieController extends AbstractController
 			$this->addFlash('success', 'La sortie a été créée.');
             return $this->redirect($this->generateUrl('details_sortie', ['id' => $sortie->getId()]));
         }
-
+        
         return $this->render('sortie/nouvelle-sortie.html.twig', [
             'controller_name' => 'SortieController',
             'nouvelleSortieForm' => $nouvelleSortieForm->createView()
@@ -60,8 +60,6 @@ class SortieController extends AbstractController
             throw $this->createNotFoundException("Cette sortie n'existe pas.");
         }
 
-        $etatRepo = $entityManager->getRepository(Etat::class);
-
         $modifSortieForm = $this->createForm(ModifSortieType::class, $sortie);
         $modifSortieForm->handleRequest($request);
 
@@ -76,6 +74,7 @@ class SortieController extends AbstractController
             }
             $entityManager->flush();
 
+            $this->addFlash('success', 'Sortie modifiée !');
             return $this->redirect($this->generateUrl('details_sortie', ['id' => $sortie->getId()]));
         }
 
@@ -92,6 +91,7 @@ class SortieController extends AbstractController
         $entityManager->remove($sortie);
         $entityManager->flush();
 
+        $this->addFlash('alert', 'Sortie supprimée !');
         return $this->redirect($this->generateUrl('app_affichage_sorties'));
     }
 
@@ -115,6 +115,8 @@ class SortieController extends AbstractController
             $sortie->setEtat($etatRepo->find(7));
             $entityManager->flush();
 
+
+            $this->addFlash('success', 'Sortie annulée !');
             return $this->redirect($this->generateUrl('app_affichage_sorties'));
         }
 
@@ -131,6 +133,7 @@ class SortieController extends AbstractController
         $sortie->setEtat($etatRepo->find(2));
         $entityManager->flush();
 
+        $this->addFlash('success', 'Sortie ouverte aux inscriptions !');
         return $this->redirect($this->generateUrl('app_affichage_sorties'));
     }
 
@@ -142,9 +145,18 @@ class SortieController extends AbstractController
             throw $this->createNotFoundException("Cette sortie n'existe pas.");
         }
 
-        return $this->render('sortie/details-sortie.html.twig', [
-            'controller_name' => 'SortieController',
-            'sortie' => $sortie
-        ]);
+        if ($sortie->getEtat()->getId()!==6) {
+            return $this->render('sortie/details-sortie.html.twig', [
+                'controller_name' => 'SortieController',
+                'sortie' => $sortie
+            ]);
+        } else {
+            $this->addFlash(
+               'alert',
+               "Cette sortie est archivée et n'est plus consultable !"
+            );
+            return $this->redirect($this->generateUrl('app_affichage_sorties'));
+        }
+        
     }
 }
