@@ -2,11 +2,12 @@
 
 namespace App\Repository;
 
-use App\Entity\Sortie;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\Schema\View;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Security;
+use App\Entity\Sortie;
+use App\Entity\Utilisateur;
 
 /**
  * @extends ServiceEntityRepository<Sortie>
@@ -48,53 +49,61 @@ class SortieRepository extends ServiceEntityRepository
        ;
    }
 
-    public function findWithForm($form, $utilisateurConnecte): Sortie
+    public function findWithForm($form, $utilisateurConnecte )
     {
-        dd($utilisateurConnecte);
+        // dd($form->get('dateDebut')->getData());
 
         $request = $this->createQueryBuilder('s');
 
-        // $request->andWhere('s.campus_id  = :val')
-        //     ->setParameter('val', $form.viewData.campus.id);
+        // Filtrer par campus
+        $request->andWhere('s.campus  = :idCampus')
+            ->setParameter('idCampus', $form->get('campus')->getData()->getId());
 
-        // if ($form.viewData.nom != null) {
-        //     $request->andWhere('s.exampleField = :val')
-        //     ->setParameter('val', $form.viewData.nom);
-        // }
+        // Filtrer par recherche de nom
+        if ($form->get('nom')->getData() != null) {
+            $request->andWhere('s.nom LIKE :nom')
+            ->setParameter('nom', '%' . $form->get('nom')->getData() . '%');
+        }
 
-        // if ($form.viewData.dateDebut != null) {
-        //     $request->andWhere('s.exampleField = :val')
-        //     ->setParameter('val', $form.viewData.dateDebut);
-        // }
+        // Filtrer par date de début si elle est renseignée
+        if ($form->get('dateDebut')->getData() !== null) {
+            $request->andWhere('s.dateHeureDebut >= :dateDebut')
+            ->setParameter('dateDebut', $form->get('dateDebut')->getData());;
+        }
 
-        // if ($form.viewData.dateFin != null) {
-        //     $request->andWhere('s.exampleField = :val')
-        //     ->setParameter('val', $form.viewData.dateFin);
-        // }
+        // Filtrer par date de début si elle est renseignée
+        if ($form->get('dateFin')->getData() !== null) {
+            $request->andWhere('s.dateHeureDebut <= :dateFin')
+            ->setParameter('dateFin', $form->get('dateFin')->getData());
+        }
 
-        // if ($form.viewData.organisateur != false) {
-        //     $request->andWhere('s.organisateur_id = :val')
-        //     ->setParameter('val', $utilisateurConnecte.organise);
-        // }
+        // Filtrer des sorties dont je suis l'organisateur
+        if ($form->get('organisateur')->getData() == true) {
+            $request->andWhere('s.organisateur = :val')
+            ->setParameter('val', $utilisateurConnecte->getId());
+        }
 
-        // if ($form.viewData.inscrit != false) {
-        //     $request->andWhere('s.exampleField = :val')
-        //     ->setParameter('val', $form.viewData.inscrit);
-        // }
+        //member of
+        // Filtrer des sorties ou je suis inscrit
+        if ($form->get('inscrit')->getData() == true) {
+            $request->andwhere(':participant MEMBER OF s.participants')
+            ->setParameter('participant', $utilisateurConnecte);
+        }
 
-        // if ($form.viewData.nonInscrit != false) {
-        //     $request->andWhere('s.exampleField = :val')
-        //     ->setParameter('val', $form.viewData.nonInscrit);
-        // }
+        // Filtrer des sorties ou je ne suis pas inscrit
+        if ($form->get('nonInscrit')->getData() == true) {
+            $request->andwhere(':participant NOT MEMBER OF s.participants')
+            ->setParameter('participant', $utilisateurConnecte);
+        }
 
-        // if ($form.viewData.sortiesPassees != false) {
-        //     $request->andWhere('s.exampleField = :val')
-        //     ->setParameter('val', $form.viewData.sortiesPassees);
-        // }
+        // Filtrer par sortie historisée
+        if ($form->get('sortiesPassees')->getData() == true) {
+            $request->andWhere('s.etat = :val')
+            ->setParameter('val', 6); //id = 6 -> historisée
+        }
 
+        $request->orderBy('s.nom', 'ASC');
 
-        // ->setMaxResults(10)
-
-        $request->getQuery()
-        ->getResult();        ;
+        return $request->getQuery()->getResult();
+    }
 }
