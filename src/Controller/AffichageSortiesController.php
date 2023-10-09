@@ -16,11 +16,18 @@ class AffichageSortiesController extends AbstractController
     {
         $rechercheForm = $this->createForm(RechercheSortiesType::class);
         $rechercheForm->handleRequest($request);
-
         if ($rechercheForm->isSubmitted() && $rechercheForm->isValid()) {
             $sorties = $sortiesRepository->findWithForm($rechercheForm, $this->getUser());
-        }else {
+        }
+        elseif(!$rechercheForm->isSubmitted()) {
             $sorties = $sortiesRepository->findAll();
+
+        }else{
+            $sorties = $sortiesRepository->findAll();
+            $this->addFlash(
+                'Alert',
+                'Le formulaire n\'est pas valide, pas de tris appliqué'
+             );
         }
 
         return $this->render('affichage_sorties/index.html.twig', [
