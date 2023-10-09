@@ -37,11 +37,13 @@ class NouvelleSortieType extends AbstractType
 			->add('dateHeureDebut', DateTimeType::class, [
 				'html5' => true,
 				'date_widget' => 'single_text',
+				'time_widget' => 'single_text',
 				'label' => 'Date et heure de la sortie :'
 			])
 			->add('dateLimiteInscription', DateTimeType::class, [
 				'html5' => true,
 				'date_widget' => 'single_text',
+				'time_widget' => 'single_text',
 				'label' => "Date limite d'inscription :"
 			])
 			->add('nbInscriptionMax', IntegerType::class, [
@@ -57,16 +59,13 @@ class NouvelleSortieType extends AbstractType
 				'with_years' => false,
 				'with_months' => false,
 				'with_days' => false,
-//				'days' => range(0,30),
-				'with_hours' => false,
-//				'hours' => range(0,24),
+				'with_hours' => true,
+				'hours' => range(0,8),
 				'with_minutes' => true,
-				'minutes' => range(0, 120),
 				'labels' => [
 					'minutes' => "minutes",
-//					'days' => "jours",
-//					'hours' => "heures",
-				]
+					'hours' => "heures",
+				],
 			])
 			->add('infosSortie', TextType::class, [
 				'required' => false,
