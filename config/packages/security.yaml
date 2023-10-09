@@ -27,7 +27,7 @@ security:
                 lifetime: 604800
                 path: /
                 always_remember_me: false
-
+            user_checker: App\Security\UserChecker
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
 
