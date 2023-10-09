@@ -23,7 +23,7 @@ class RechercheSortiesType extends AbstractType
         $builder
             ->add('campus', EntityType::class, [
                 'class' => Campus::class,
-                'required' => true, 
+                'required' => false, 
                 'label' => 'Rechercher par campus', 
                 'choice_label' => 'nom'
             ])

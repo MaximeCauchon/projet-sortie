@@ -51,13 +51,15 @@ class SortieRepository extends ServiceEntityRepository
 
     public function findWithForm($form, $utilisateurConnecte )
     {
-        // dd($form->get('dateDebut')->getData());
 
         $request = $this->createQueryBuilder('s');
 
         // Filtrer par campus
-        $request->andWhere('s.campus  = :idCampus')
+        if ($form->get('campus')->getData() != null) {
+            $request->andWhere('s.campus  = :idCampus')
             ->setParameter('idCampus', $form->get('campus')->getData()->getId());
+        }
+
 
         // Filtrer par recherche de nom
         if ($form->get('nom')->getData() != null) {

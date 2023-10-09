@@ -19,7 +19,8 @@ class Campus
 
     #[ORM\Column(length: 255)]
 	#[Assert\NotBlank(message:"Veuillez renseigner un nom au campus !")]
-	#[Assert\Unique(message:"Ce nom existe déjà")]
+	// #[Assert\Unique(message:"Ce nom existe déjà")]
+    //TODO: régler le conflit de la ligne commenté avec le formulaire de recheche de sortie(RechecheSortieType)
 	private ?string $nom = null;
 
     #[ORM\OneToMany(mappedBy: 'campus', targetEntity: Participant::class)]
