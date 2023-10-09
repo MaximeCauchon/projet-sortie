@@ -22,12 +22,12 @@
 			<div class="space-y-3">
 				{{ form_row(nouvelleSortieForm.ville) }}
 
-				 {{ form_row(nouvelleSortieForm.lieu) }} 
+				 {{ form_row(nouvelleSortieForm.lieu) }}
 				<div>
-					Rue :
+					Rue : 
 				</div>
 				<div>
-					Code postal :
+					Code postal : 
 				</div>
 				<div>
 					Latitude :
@@ -48,20 +48,18 @@
 	</main>
 {% endblock %}
 
-{# {% block javascripts %}
+{% block javascripts %}
 	<script>
 		window.onload = () => {
-			let ville = document.getElementById('nouvelle_sortie_ville');
+			let ville = document.querySelector('#nouvelle_sortie_ville');
 			ville.addEventListener("change", function() {
 				let form = this.closest("form");
-				let data = this.name + "=" + this.value;
+				let formData = new FormData(form);
+
 				
 				fetch(form.action, {
 					method: form.getAttribute('method'),
-					body: data,
-					headers: {
-						"Content-Type": "application/x-www-form-urlencoded; charset:utf-8"
-					}
+					body: formData,
 				})
 				.then(response => response.text())
 				.then(html => {
@@ -69,10 +67,8 @@
 					content.innerHTML = html;
 					let nouveauSelect = content.querySelector('#nouvelle_sortie_lieu');
 					document.querySelector("#nouvelle_sortie_lieu").replaceWith(nouveauSelect);
-					console.log(nouveauSelect);
-				})
-				
+				})				
 			})
 		}
 	</script>
-{% endblock %} #}
+{% endblock %}

@@ -6,9 +6,6 @@ namespace App\Form;
 use App\Entity\Lieu;
 use App\Entity\Ville;
 use App\Entity\Sortie;
-use App\Repository\LieuRepository;
-
-;
 
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -16,7 +13,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -29,21 +26,20 @@ class NouvelleSortieType extends AbstractType
 {
 	public function buildForm(FormBuilderInterface $builder, array $options): void
 	{
-
 		$builder
 			->add('nom', TextType::class, [
 				'label' => 'Nom de la sortie :'
 			])
 			->add('dateHeureDebut', DateTimeType::class, [
 				'html5' => true,
-				'date_widget' => 'single_text',
-				'time_widget' => 'single_text',
+				'data' => new \DateTime('now'),
+				'widget' => 'single_text',
 				'label' => 'Date et heure de la sortie :'
 			])
 			->add('dateLimiteInscription', DateTimeType::class, [
 				'html5' => true,
-				'date_widget' => 'single_text',
-				'time_widget' => 'single_text',
+				'data' => new \DateTime('now'),
+				'widget' => 'single_text',
 				'label' => "Date limite d'inscription :"
 			])
 			->add('nbInscriptionMax', IntegerType::class, [
@@ -60,7 +56,7 @@ class NouvelleSortieType extends AbstractType
 				'with_months' => false,
 				'with_days' => false,
 				'with_hours' => true,
-				'hours' => range(0,8),
+				'hours' => range(0, 8),
 				'with_minutes' => true,
 				'labels' => [
 					'minutes' => "minutes",
@@ -75,17 +71,32 @@ class NouvelleSortieType extends AbstractType
 				'label' => 'Ville :',
 				'class' => Ville::class,
 				'choice_label' => 'nom',
-				'placeholder' => '',
+				'placeholder' => '-- Sélectionner une ville --',
 				'mapped' => false
 			])
-			->add('lieu', EntityType::class, [
-				'class' => Lieu::class,
+
+			->add('lieu', ChoiceType::class, [
 				'label' => 'Lieu :',
 				'choice_label' => 'nom',
-				'placeholder' => '',
+				'placeholder' => "-- Sélectionner d'abord une ville --",
 			])
+
 			->add('enregistrer', SubmitType::class, ['label' => 'Enregistrer'])
 			->add('publier', SubmitType::class, ['label' => 'Publier']);
+
+		$builder->get('ville')->addEventListener(
+			FormEvents::POST_SUBMIT,
+			function (FormEvent $event) {
+				$form = $event->getForm();
+				$form->getParent()->add('lieu', EntityType::class, [
+					'class' => Lieu::class,
+					'label' => 'Lieu :',
+					'choice_label' => 'nom',
+					'placeholder' => '-- Sélectionner un lieu --',
+					'choices' => $form->getData()->getLieux()
+				]);
+			}
+		);
 	}
 
 	public function configureOptions(OptionsResolver $resolver): void
