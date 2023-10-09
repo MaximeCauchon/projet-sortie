@@ -40,6 +40,25 @@ class ParticipantRepository extends ServiceEntityRepository implements PasswordU
         $this->getEntityManager()->flush();
     }
 
+//	public function getAllPartWithJunction():array
+//	{
+////		$query->select ('c');
+////		$query->from(MyBundle:Company, 'c');
+////		$query->leftJoin('c.ChildrenCompany','j');
+////		$query->where('j.id = :subCompanyId');
+////		$query->setParameter("subCompanyId", 5);
+//
+//
+//		return $this->createQueryBuilder('p')
+////            ->andWhere('p.exampleField = :val')
+////            ->setParameter('val', $value)
+//			->orderBy('p.nom', 'ASC')
+//			->orderBy('p.prenom', 'ASC')
+////            ->setMaxResults(10)
+//            ->getQuery()
+//            ->getResult()
+//        ;
+//	}
 //    /**
 //     * @return Participant[] Returns an array of Participant objects
 //     */

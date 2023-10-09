@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Repository\EtatRepository;
 use App\Repository\SortieRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -239,4 +240,17 @@ class Sortie
     {
         return count($this->getParticipants());
     }
+
+	public function annulerSortie(string $motif, EtatRepository $etatRepo): void
+	{
+		$this->setMotifAnnulation("Annulé car organisateur/organisatrice éjecté de la plateforme.");
+		$this->setEtat($etatRepo->find(7));
+	}
+	public function isNotAnnule(): bool
+	{
+		if ($this->getEtat()->getId()!=7){
+			return true;
+		}
+		return false;
+	}
 }
