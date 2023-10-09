@@ -28,14 +28,23 @@ class SecurityController extends AbstractController
 
 		// get the login error if there is one
 		$error = $authenticationUtils->getLastAuthenticationError();
-		if ($error) {
-			$this->addFlash('error', 'Il y a une erreur dans l\'adresse mail ou le mot de passe.');
+		if ($error ) {
+			if ($error->getMessage() != "Vous avez été éjecté de la plateforme."){
+
+				$this->addFlash('error', 'Il y a une erreur dans l\'adresse mail ou le mot de passe.');
+			}
+			else{
+
+				$this->addFlash('error', $error->getMessage());
+			}
 		}
+
 		// last username entered by the user
 		$lastUsername = $authenticationUtils->getLastUsername();
 
 		return $this->render('security/login.html.twig', [
 			'last_username' => $lastUsername,
+			'error' => $error,
 		]);
 	}
 
