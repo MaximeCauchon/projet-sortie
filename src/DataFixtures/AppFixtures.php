@@ -12,42 +12,44 @@ use Doctrine\Persistence\ObjectManager;
 use App\DataFixtures\ParticipantFixtures;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 
-class AppFixtures extends Fixture implements FixtureGroupInterface
+
+class AppFixtures extends Fixture
 {
-    public static function getGroups(): array
+    private UserPasswordHasherInterface $passwordHasher;
+
+    public function __construct(UserPasswordHasherInterface $passwordHasher)
     {
-        return ['appFixture'];
+        $this->passwordHasher = $passwordHasher;
     }
 
     public function load(ObjectManager $manager)
     {
-        $passwordEncoder = new UserPasswordHasherInterface();
         $nombreDeVilleAjoute = 8;
         $nombreDeLieuAjoute = 20;
         $nombreDeParticipantAjoute = 50;
         $nombreDeSortieAjoute = 100;
         $pourcentSortiePasse = 40;
-        $pourcentSortiepresente = 30;
+        $pourcentSortiePresente = 30;
 
         // Chargez les fixtures dans l'ordre de votre choix
-        $this->loadFixtures($manager, [
-            EtatFixtures::class,
-            CampusFixtures::class,
-            new VilleFixtures($nombreDeVilleAjoute),
-            // new LieuFixtures($nombreDeLieuAjoute),
-            new ParticipantFixtures($nombreDeParticipantAjoute, $passwordEncoder),
-            new SortieFixtures($nombreDeSortieAjoute, $pourcentSortiePasse, $pourcentSortiepresente),
-            AdminFixtures::class,
-        ]);
+
+            $EtatFixtures = new EtatFixtures();
+            $EtatFixtures->load($manager);
+            $CampusFixtures = new CampusFixtures();
+            $CampusFixtures->load($manager);
+            $VilleFixtures = new VilleFixtures($nombreDeVilleAjoute);
+            $VilleFixtures->load($manager);
+            $LieuFixtures = new LieuFixtures($nombreDeLieuAjoute);
+            $LieuFixtures->load($manager);
+            $ParticipantFixtures = new ParticipantFixtures($nombreDeParticipantAjoute, $this->passwordHasher);
+            $ParticipantFixtures->load($manager);
+            $SortieFixtures = new SortieFixtures($nombreDeSortieAjoute, $pourcentSortiePasse, $pourcentSortiePresente);
+            $SortieFixtures->load($manager);
+            $AdminFixtures = new AdminFixtures($this->passwordHasher);
+            $AdminFixtures->load($manager);
+
     }
 
-    private function loadFixtures(ObjectManager $manager, array $fixtures)
-    {
-        foreach ($fixtures as $fixtureClass) {
-            $fixture = new $fixtureClass();
-            $fixture->load($manager);
-        }
-    }
+
 }

@@ -9,12 +9,8 @@ use App\Entity\Participant;
 use Faker;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class ParticipantFixtures extends Fixture implements FixtureGroupInterface
+class AdminFixtures
 {
-    public static function getGroups(): array
-    {
-        return ['group10'];
-    }
 
     private $passwordEncoder;
 
@@ -51,8 +47,9 @@ class ParticipantFixtures extends Fixture implements FixtureGroupInterface
         } else {
             exit("Aucune campus n'existe");
         }
+        $manager->persist($Participant);
+		$manager->flush();
 
-    $manager->flush();
         
     }
 }
