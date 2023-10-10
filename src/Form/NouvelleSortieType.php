@@ -72,6 +72,8 @@ class NouvelleSortieType extends AbstractType
 				'class' => Ville::class,
 				'choice_label' => 'nom',
 				'placeholder' => '-- Sélectionner une ville --',
+				'placeholder_attr' =>
+					['disabled' => 'disabled'],
 				'mapped' => false
 			])
 
@@ -79,6 +81,7 @@ class NouvelleSortieType extends AbstractType
 				'label' => 'Lieu :',
 				'choice_label' => 'nom',
 				'placeholder' => "-- Sélectionner d'abord une ville --",
+				'disabled' => true,
 			])
 
 			->add('enregistrer', SubmitType::class, ['label' => 'Enregistrer'])
@@ -93,6 +96,8 @@ class NouvelleSortieType extends AbstractType
 					'label' => 'Lieu :',
 					'choice_label' => 'nom',
 					'placeholder' => '-- Sélectionner un lieu --',
+					'placeholder_attr' =>
+					['disabled' => 'disabled'],
 					'choices' => $form->getData()->getLieux()
 				]);
 			}

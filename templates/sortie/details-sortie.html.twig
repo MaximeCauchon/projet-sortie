@@ -26,8 +26,14 @@
 			<p>Nombre de places :
 				{{ sortie.nbInscriptionMax }}</p>
 			<p>Durée :
-				{{ sortie.duree | date("%I") }}
-				minutes</p>
+				{% if sortie.duree | date("%h") != 0 %}
+					{{ sortie.duree | date("%h") }}
+					h 
+				{% endif %}
+				{% if sortie.duree | date("%I") != 0 %}
+					{{ sortie.duree | date("%I") }}
+					min
+				{% endif %}</p>
 			<p>Description et infos :
 				{{ sortie.infosSortie }}</p>
 			{% if sortie.motifAnnulation %}

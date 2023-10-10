@@ -4,13 +4,13 @@
 {% endblock %}
 
 {% block body %}
-	<main class="flex flex-col">
-		<h1 class=" text-center my-5">
+	<main class="container flex flex-col mx-auto">
+		<h1 class=" text-center mt-12">
 			Créer une sortie
 		</h1>
 
 		{{ form_start(nouvelleSortieForm) }}
-		<div class="grid grid-cols-2 w-3/4 mx-auto text-xs">
+		<div class="grid grid-cols-2 mt-12 w-1/2 mx-auto text-sm">
 			<div class="space-y-3">
 				{{ form_row(nouvelleSortieForm.nom) }}
 				{{ form_row(nouvelleSortieForm.dateHeureDebut) }}
@@ -22,26 +22,24 @@
 			<div class="space-y-3">
 				{{ form_row(nouvelleSortieForm.ville) }}
 
-				 {{ form_row(nouvelleSortieForm.lieu) }}
-				<div>
-					Rue : 
-				</div>
-				<div>
+				{{ form_row(nouvelleSortieForm.lieu) }}
+				<div id='code_postal'>
 					Code postal : 
 				</div>
-				<div>
+				{#
+				<div id='latitude'>
 					Latitude :
 				</div>
-				<div>
+				<div id='longitude'>
 					Longitude :
-				</div>
+				</div> #}
 			</div>
 		</div>
 
 		<div class="flex mt-12 space-x-6 justify-center">
 			{{ form_row(nouvelleSortieForm.enregistrer, { 'attr': {'class': 'border-2 border-black px-3 py-1 shadow-md shadow-slate-950'}}) }}
 			{{ form_row(nouvelleSortieForm.publier, { 'attr': {'class': 'border-2 border-black px-3 py-1 shadow-md shadow-slate-950'}}) }}
-			<a href="{{path('app_affichage_sorties') }}" class="border-2 border-black px-3 py-1 shadow-md shadow-slate-950">Annuler</a>
+			<a href="{{path('app_affichage_sorties') }}" class="border-2 border-black px-3 py-1 shadow-md shadow-slate-950 bg-red-200">Annuler</a>
 		</div>
 
 		{{ form_end(nouvelleSortieForm) }}
@@ -52,11 +50,12 @@
 	<script>
 		window.onload = () => {
 			let ville = document.querySelector('#nouvelle_sortie_ville');
+
+			let codePostal = document.querySelector('#code_postal');
+
 			ville.addEventListener("change", function() {
 				let form = this.closest("form");
 				let formData = new FormData(form);
-
-				
 				fetch(form.action, {
 					method: form.getAttribute('method'),
 					body: formData,
@@ -67,8 +66,24 @@
 					content.innerHTML = html;
 					let nouveauSelect = content.querySelector('#nouvelle_sortie_lieu');
 					document.querySelector("#nouvelle_sortie_lieu").replaceWith(nouveauSelect);
-				})				
-			})
+				})
+
+				let selectedVilleId = this.value;
+
+				fetch(`/get-cp-by-ville/${selectedVilleId}`, {
+				method: 'GET'
+				})
+				.then(response => response.json())
+				.then(data => {
+					if (data.code_postal) {
+						codePostal.textContent = `Code postal : ${data.code_postal}`;
+					} else {
+						codePostal.textContent = '';
+					}
+				})	
+        	});
 		}
 	</script>
 {% endblock %}
+
+
