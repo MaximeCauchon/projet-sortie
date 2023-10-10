@@ -2,3 +2,35 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  /* HEADINGS */
+  h1 {
+    @apply text-3xl;
+  }
+  h2 {
+    @apply text-2xl;
+  }
+
+
+
+  /* LIENS */
+  a {
+    @apply italic text-blue-800;
+  }
+
+  /* NAVBAR */
+  .navbar a {
+    @apply border border-blue-100 mx-2 px-4 py-2 ring-1 text-black;
+  }
+
+  /* FORMULAIRES */
+  label {
+    @apply font-semibold;
+  }
+  input {
+    @apply border border-blue-100 mx-2 p-1;
+  }
+  select {
+    @apply border border-blue-100 mx-2 p-1;
+  }
+}
