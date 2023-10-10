@@ -2,20 +2,16 @@
 
 namespace App\DataFixtures;
 
+use Faker;
+use App\Entity\Campus;
+use App\Entity\Participant;
+use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
-use Doctrine\Persistence\ObjectManager;
-use App\Entity\Participant;
-use Faker;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class ParticipantFixtures extends Fixture implements FixtureGroupInterface
+class ParticipantFixtures
 {
-    public static function getGroups(): array
-    {
-        return ['group10'];
-    }
-
     private $nombreDeParticipantAjoute=0;
     private $passwordEncoder;
 
@@ -54,7 +50,7 @@ class ParticipantFixtures extends Fixture implements FixtureGroupInterface
         } else {
             exit("Aucune campus n'existe");
         }
-        // $Participant->addEstInscrit($faker->city);
+        $manager->persist($Participant);
         }
     $manager->flush();
         

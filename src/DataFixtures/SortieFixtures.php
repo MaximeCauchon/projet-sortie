@@ -12,12 +12,8 @@ use App\Entity\Campus;
 use App\Entity\Participant;
 use Faker;
 
-class SortieFixtures extends Fixture implements FixtureGroupInterface
+class SortieFixtures
 {
-    public static function getGroups(): array
-    {
-        return ['group10'];
-    }
 
     private $nombreDeSortieAjoute=0;
     private $pourcentSortiePasse=0;

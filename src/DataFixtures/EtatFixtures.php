@@ -7,35 +7,38 @@ use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Persistence\ObjectManager;
 use App\Entity\Etat;
 
-class EtatFixtures extends Fixture implements FixtureGroupInterface
+class EtatFixtures 
 {
-    public static function getGroups(): array
-    {
-        return ['group10', 'DBvide'];
-    }
 
     public function load(ObjectManager $manager): void
     {
         $creee = new Etat();
         $creee->setLibelle("ouverte"); 
+        $manager->persist($creee);
 
         $ouverte = new Etat();
-        $ouverte->setLibelle("ouverte"); 
+        $ouverte->setLibelle("ouverte");
+        $manager->persist($ouverte); 
 
         $cloturee = new Etat();
-        $cloturee->setLibelle("cloturee"); 
+        $cloturee->setLibelle("cloturee");
+        $manager->persist($cloturee); 
 
         $activiteEnCours = new Etat();
-        $activiteEnCours->setLibelle("activiteEnCours"); 
+        $activiteEnCours->setLibelle("activiteEnCours");
+        $manager->persist($activiteEnCours); 
 
         $passee = new Etat();
-        $passee->setLibelle("passee"); 
+        $passee->setLibelle("passee");
+        $manager->persist($passee); 
 
         $annulee = new Etat();
-        $annulee->setLibelle("annulee"); 
+        $annulee->setLibelle("annulee");
+        $manager->persist($annulee); 
 
         $historisee = new Etat();
-        $historisee->setLibelle("historisee"); 
+        $historisee->setLibelle("historisee");
+        $manager->persist($historisee); 
 
     $manager->flush();
         

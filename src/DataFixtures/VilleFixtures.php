@@ -8,12 +8,8 @@ use Doctrine\Persistence\ObjectManager;
 use App\Entity\Ville;
 use Faker;
 
-class VilleFixtures extends Fixture implements FixtureGroupInterface
+class VilleFixtures
 {
-    public static function getGroups(): array
-    {
-        return ['group2'];
-    }
 
     private $nombreDeVilleAjoute=0;
 

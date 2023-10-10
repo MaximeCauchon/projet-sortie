@@ -9,14 +9,10 @@ use App\Entity\Lieu;
 use App\Entity\Ville;
 use Faker;
 
-class LieuFixtures extends Fixture implements FixtureGroupInterface
+class LieuFixtures
 {
-    public static function getGroups(): array
-    {
-        return ['group1'];
-    }
 
-    private $nombreDeLieuAjoute=0;
+    private int $nombreDeLieuAjoute=0;
 
     public function __construct(int $nombreDeLieuAjoute)
     {
