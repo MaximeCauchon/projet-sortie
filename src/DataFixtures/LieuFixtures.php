@@ -16,7 +16,7 @@ class LieuFixtures extends Fixture implements FixtureGroupInterface
         return ['group1'];
     }
 
-    private int $nombreDeLieuAjoute=0;
+    private $nombreDeLieuAjoute=0;
 
     public function __construct(int $nombreDeLieuAjoute)
     {
