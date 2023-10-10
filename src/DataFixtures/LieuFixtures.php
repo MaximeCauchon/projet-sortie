@@ -16,16 +16,21 @@ class LieuFixtures extends Fixture implements FixtureGroupInterface
         return ['group1'];
     }
 
+    private int $nombreDeLieuAjoute=0;
+
+    public function __construct(int $nombreDeLieuAjoute)
+    {
+        $this->nombreDeLieuAjoute = $nombreDeLieuAjoute;
+    }
+
     public function load(ObjectManager $manager): void
     {
 
-        $nombreDeLieuAjoute = 5;
-
         $faker = Faker\Factory::create('fr_FR');
 
-        $existingVille = $manager->getRepository(ville::class)->findAll(); //retourne un tableau des objets Ville de la db
+        $existingVille = $manager->getRepository(Ville::class)->findAll(); //retourne un tableau des objets Ville de la db
 
-        for ($i = 0; $i < $nombreDeLieuAjoute; $i++) {
+        for ($i = 0; $i < $this->nombreDeLieuAjoute; $i++) {
         $lieu = new Lieu();
 
         $lieu->setNom($faker->unique()->city); 
@@ -36,13 +41,11 @@ class LieuFixtures extends Fixture implements FixtureGroupInterface
 
             //choisi de d'un id ville valid
         if (!empty($existingVille)) {
-            // $randomVille = $existingVille[array_rand($existingVille)];
             $lieu->setVille($faker->randomElement($existingVille));
         } else {
             exit("Aucune ville n'existe");
         }
 
-        // Enregistrez l'entité User dans la base de données.
         $manager->persist($lieu);
         }   
     $manager->flush();
