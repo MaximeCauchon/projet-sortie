@@ -11,8 +11,6 @@
     @apply text-2xl;
   }
 
-
-
   /* LIENS */
   a {
     @apply italic text-blue-800;
@@ -20,7 +18,7 @@
 
   /* NAVBAR */
   .navbar a {
-    @apply border border-blue-100 mx-2 px-4 py-2 ring-1 text-black;
+    @apply border border-slate-400 rounded-md mx-2 px-4 py-2 text-black;
   }
 
   /* FORMULAIRES */
