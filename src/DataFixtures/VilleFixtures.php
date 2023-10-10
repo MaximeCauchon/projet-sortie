@@ -15,14 +15,19 @@ class VilleFixtures extends Fixture implements FixtureGroupInterface
         return ['group2'];
     }
 
+    private $nombreDeVilleAjoute=0;
+
+    public function __construct(int $nombreDeVilleAjoute)
+    {
+        $this->nombreDeVilleAjoute = $nombreDeVilleAjoute;
+    }
+
     public function load(ObjectManager $manager): void
     {
 
-        $nombreDeVilleAjoute = 5;
-
         $faker = Faker\Factory::create('fr_FR');
 
-        for ($i = 0; $i < $nombreDeVilleAjoute; $i++) {
+        for ($i = 0; $i < $this->nombreDeVilleAjoute; $i++) {
         $ville = new Ville();
 
         $ville->setNom($faker->unique()->city); 

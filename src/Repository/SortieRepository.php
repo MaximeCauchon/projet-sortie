@@ -104,7 +104,7 @@ class SortieRepository extends ServiceEntityRepository
             ->setParameter('val', 6); //id = 6 -> historisée
         }
 
-        $request->orderBy('s.nom', 'ASC');
+        $request->orderBy('s.dateHeureDebut', 'ASC');
 
         return $request->getQuery()->getResult();
     }
