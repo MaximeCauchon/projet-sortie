@@ -34,8 +34,6 @@ class SortieFixtures
         for ($i = 0; $i < $this->nombreDeSortieAjoute; $i++) {
         $sortie = new Sortie();
 
-
-        //TODO verifier si l'organisateur n'est pas un compte désactivé
         $existingOrganisateur = $manager->getRepository(Participant::class)->findActif(); //retourne un tableau des objets Organisateur de la db
         $existingParticipant = $manager->getRepository(Participant::class)->findAll();
         $existingEtat = $manager->getRepository(Etat::class)->findAll();
@@ -78,7 +76,7 @@ class SortieFixtures
 
         $sortie->setNbInscriptionMax($NbInscriptionMax);
         if (!empty($existingParticipant)) {
-            for ($i = 0; $NbInscription  <= $i; $i++) {
+            for ($j = 0; $j < $NbInscription; $j++) {
                 $sortie->addParticipant($faker->randomElement($existingParticipant));
             }
         } else {
@@ -105,7 +103,6 @@ class SortieFixtures
             $sortie->setDateHeureDebut($DateHeureDebut);
             $sortie->setDateLimiteInscription($DateLimiteInscription);
         }       
-
         $manager->persist($sortie);
         }
     $manager->flush();

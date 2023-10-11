@@ -40,6 +40,13 @@ class ParticipantRepository extends ServiceEntityRepository implements PasswordU
         $this->getEntityManager()->flush();
     }
 
+    public function findActif(){
+        $request = $this->createQueryBuilder('s');
+        $request->andWhere('s.isActif  = :idActif')
+        ->setParameter('idActif', 1); 
+        return $request->getQuery()->getResult();
+    }
+
 //	public function getAllPartWithJunction():array
 //	{
 ////		$query->select ('c');

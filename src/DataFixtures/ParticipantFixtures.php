@@ -29,9 +29,9 @@ class ParticipantFixtures
         for ($i = 0; $i < $this->nombreDeParticipantAjoute; $i++) {
         $Participant = new Participant();
 
-        $name = $faker->firstName();
+        $name = $faker->lastName();
         $Participant->setNom($name); 
-        $Participant->setPrenom($faker->lastName());
+        $Participant->setPrenom($faker->firstName());
         $Participant->setPseudo($faker->unique()->userName());
         $Participant->setTelephone($faker->phoneNumber());
         $Participant->setEmail($faker->unique()->email());
@@ -42,7 +42,7 @@ class ParticipantFixtures
                 $password
         ));
         $Participant->setIsActif($faker->boolean(90));//90% d'actif
-        $Participant->setImage($faker->imageUrl(10, 10, true)); 
+        // $Participant->setImage($faker->imageUrl(10, 10, true)); 
         $Participant->setRoles(["ROLE_USER"]);
         
         if (!empty($existingCampus)) {
