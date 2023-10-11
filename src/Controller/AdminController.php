@@ -7,6 +7,7 @@ use App\Entity\Participant;
 use App\Entity\Ville;
 use App\Form\CampusType;
 use App\Form\RegistrationFormType;
+use App\Form\UploadParticipantViaCsvType;
 use App\Form\VilleType;
 use App\Repository\CampusRepository;
 use App\Repository\EtatRepository;
@@ -81,12 +82,62 @@ class AdminController extends AbstractController
 
 // ------------------- Gestion Participants -------------------
 	#[Route('/gestionParticipants', name: 'gestionParticipants')]
-	public function gestionParticipants(ParticipantRepository $partRepo): Response
+	public function gestionParticipants(ParticipantRepository $partRepo, Request $request, EntityManagerInterface $em): Response
 	{
+
+		$uploadParticipantViaCsvForm = $this->createForm(UploadParticipantViaCsvType::class);
+		$uploadParticipantViaCsvForm->handleRequest($request);
+		if ($uploadParticipantViaCsvForm->isSubmitted() && $uploadParticipantViaCsvForm->isValid()) {
+
+
+			$file = $uploadParticipantViaCsvForm->get('filePart')->getData();
+			$campus = $uploadParticipantViaCsvForm->get('campus')->getData();
+			$count = 0;
+			try {
+				if (($handle = fopen($file->getPathname(), "r")) !== false) {
+					// Read and process the lines.
+					// Skip the first line if the file includes a header
+					while (($data = fgetcsv($handle)) !== false) {
+						if ($count == 0) {
+							$nameCol = $data;
+							dump($nameCol);
+						} else {
+							// Do the processing: Map line to entity, validate if needed
+							$part = new Participant();
+							$part->setCampus($campus);
+							$part->setRoles([]);
+							$part->setIsActif(true);
+
+							$part->setNom($data[array_search('nom', $nameCol)]);
+							$part->setPrenom($data[array_search('prenom', $nameCol)]);
+							$part->setPseudo($data[array_search('pseudo', $nameCol)]);
+							$part->setEmail($data[array_search('email', $nameCol)]);
+							$part->setTelephone($data[array_search('telephone', $nameCol)]);
+							$part->setPassword($data[array_search('password', $nameCol)]);
+							// Assign fields
+							$em->persist($part);
+						}
+						$count++;
+					}
+					fclose($handle);
+					$em->flush();
+				}
+				$this->addFlash('success', $count - 1 . " participants ont été ajoutés dans le campus " . $campus->getNom() . ".");
+			} catch (\Exception $e) {
+				if ($e->getCode() == 1062) {
+					$this->addFlash('error', "Une erreur s'est produite : " . $e->getPrevious()->getPrevious()->errorInfo[2]);
+				} else {
+					$this->addFlash('error', "Une erreur s'est produite : " . $e->getMessage());
+				}
+			}
+
+
+		}
 		$participants = $partRepo->findBy([], ['nom' => 'ASC', 'prenom' => 'ASC']);
 
 		return $this->render('admin/gestionParticipants.html.twig', [
-			'participants' => $participants
+			'participants' => $participants,
+			'uploadParticipantViaCsvForm' => $uploadParticipantViaCsvForm,
 		]);
 	}
 
@@ -158,14 +209,14 @@ class AdminController extends AbstractController
 	public function gestionCampus(Request $request, CampusRepository $campusRepo, EntityManagerInterface $entityManager): Response
 	{
 		$newCampus = new Campus();
-		$newCampusForm =$this->createForm(CampusType::class, $newCampus);
+		$newCampusForm = $this->createForm(CampusType::class, $newCampus);
 		$newCampusForm->handleRequest($request);
 		if ($newCampusForm->isSubmitted() && $newCampusForm->isValid()) {
 			$entityManager->persist($newCampus);
 			$entityManager->flush();
 		}
 		$newCampus = new Campus();
-		$newCampusForm =$this->createForm(CampusType::class, $newCampus);
+		$newCampusForm = $this->createForm(CampusType::class, $newCampus);
 		$campus = $campusRepo->findBy([], ['nom' => 'ASC']);
 
 		return $this->render('admin/gestionCampus.html.twig', [
@@ -180,7 +231,7 @@ class AdminController extends AbstractController
 	public function gestionCampus_Edit(Campus $monCampusAModifier, Request $request, CampusRepository $campusRepo, EntityManagerInterface $entityManager): Response
 	{
 		$campus = $campusRepo->findBy([], ['nom' => 'ASC']);
-		$editCampusForm = $this->createForm(CampusType::class,$monCampusAModifier);
+		$editCampusForm = $this->createForm(CampusType::class, $monCampusAModifier);
 
 		$editCampusForm->handleRequest($request);
 		if ($editCampusForm->isSubmitted() && $editCampusForm->isValid()) {
