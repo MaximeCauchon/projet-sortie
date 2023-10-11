@@ -26,7 +26,6 @@ class EditUserLoggedType extends AbstractType
 				'required'=>false,
 				'label' => 'Téléphone'
 			])
-            ->add('isActif')
 			->add('imageFile', FileType::class, [
 				'label' => 'Photo de profil',
 				'mapped' => false,
