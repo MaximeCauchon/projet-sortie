@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Etat;
+use App\Entity\Lieu;
 use App\Entity\Sortie;
 use App\Form\ModifSortieType;
+use App\Form\NouveauLieuType;
 use App\Form\AnnulerSortieType;
 use App\Form\NouvelleSortieType;
 use App\Repository\EtatRepository;
@@ -32,8 +34,6 @@ class SortieController extends AbstractController
         $nouvelleSortieForm = $this->createForm(NouvelleSortieType::class, $sortie);
         $nouvelleSortieForm->handleRequest($request);
 
-
-
         if ($nouvelleSortieForm->isSubmitted() && $nouvelleSortieForm->isValid()) {
 
             if ($nouvelleSortieForm->get('publier')->isClicked()) {
@@ -44,10 +44,22 @@ class SortieController extends AbstractController
 			$this->addFlash('success', 'La sortie a été créée.');
             return $this->redirect($this->generateUrl('details_sortie', ['id' => $sortie->getId()]));
         }
-        
+
+        $lieu = new Lieu();
+
+        $nouveauLieuForm = $this->createForm(NouveauLieuType::class, $lieu);
+        $nouveauLieuForm->handleRequest($request);
+
+        if ($nouveauLieuForm->isSubmitted() && $nouveauLieuForm->isValid()) {
+            $entityManager->persist($lieu);
+            $entityManager->flush();
+			$this->addFlash('success', 'Le lieu a été créé.');
+        }
+            
         return $this->render('sortie/nouvelle-sortie.html.twig', [
             'controller_name' => 'SortieController',
-            'nouvelleSortieForm' => $nouvelleSortieForm->createView()
+            'nouvelleSortieForm' => $nouvelleSortieForm->createView(),
+            'nouveauLieuForm' => $nouveauLieuForm->createView()
         ]);
     }
 

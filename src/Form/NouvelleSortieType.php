@@ -52,6 +52,7 @@ class NouvelleSortieType extends AbstractType
 			])
 			->add('duree', DateIntervalType::class, [
 				'label' => 'Durée :',
+				'widget' => 'single_text',
 				'with_years' => false,
 				'with_months' => false,
 				'with_days' => false,
