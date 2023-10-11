@@ -31,9 +31,15 @@ class LieuFixtures
 
         $lieu->setNom($faker->unique()->city); 
         $lieu->setRue($faker->unique()->streetName); 
-        // TO DO attention, les %null entre Latitude et Longitude sont indépandants
-        $lieu->setLatitude($faker->optional($weight = 0.5)->latitude($min = -90, $max = 90));//50% null ($weight = 0.5)
-        $lieu->setLongitude($faker->optional($weight = 0.5)->longitude($min = -90, $max = 90));//50% null
+
+        $enableLocation = $faker->optional($weight = 0.5)->boolean;//50% null ($weight = 0.5)
+        if ($enableLocation) {
+            $lieu->setLatitude($faker->latitude($min = -90, $max = 90));
+            $lieu->setLongitude($faker->longitude($min = -180, $max = 180)); 
+        } else {
+            $lieu->setLatitude(null);
+            $lieu->setLongitude(null);
+        }
 
             //choisi de d'un id ville valid
         if (!empty($existingVille)) {
