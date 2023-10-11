@@ -20,10 +20,10 @@ class AffichageSortiesController extends AbstractController
             $sorties = $sortiesRepository->findWithForm($rechercheForm, $this->getUser());
         }
         elseif(!$rechercheForm->isSubmitted()) {
-            $sorties = $sortiesRepository->findAll();
+            $sorties = $sortiesRepository->defaultSearch($this->getUser());
 
         }else{
-            $sorties = $sortiesRepository->findAll();
+            $sorties = $sortiesRepository->defaultSearch($this->getUser());
             $this->addFlash(
                 'Alert',
                 'Le formulaire n\'est pas valide, pas de tris appliqué'

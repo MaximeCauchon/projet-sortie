@@ -28,14 +28,14 @@ class AppFixtures extends Fixture
         $nombreDeVilleAjoute = 8;
         $nombreDeLieuAjoute = 20;
         $nombreDeParticipantAjoute = 50;
-        $nombreDeSortieAjoute = 50;
+        $nombreDeSortieAjoute = 100;
         
         $pourcentSortiePasse = 40;
         $pourcentSortiePresente = 30;
 
         // Chargez les fixtures dans l'ordre de votre choix
 
-            echo "<br />Création des etat";
+            echo "\n Création des etat";
             $EtatFixtures = new EtatFixtures();
             $EtatFixtures->load($manager);
 

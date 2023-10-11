@@ -15,9 +15,9 @@ use Faker;
 class SortieFixtures
 {
 
-    private $nombreDeSortieAjoute=0;
-    private $pourcentSortiePasse=0;
-    private $pourcentSortiepresente=0;
+    private $nombreDeSortieAjoute;
+    private $pourcentSortiePasse;
+    private $pourcentSortiepresente;
 
     public function __construct(int $nombreDeSortieAjoute, int $pourcentSortiePasse, int $pourcentSortiepresente)
     {
@@ -39,6 +39,15 @@ class SortieFixtures
         $existingEtat = $manager->getRepository(Etat::class)->findAll();
         $existingLieu = $manager->getRepository(Lieu::class)->findAll();
         $existingCampus = $manager->getRepository(Campus::class)->findAll();
+        
+        //TODO: si etat = créée -> pas d'indcrit
+        //TODO: si et seulement si etat = annulée -> commentaire annulation
+        if (!empty($existingEtat)) {
+            $etat = $faker->randomElement($existingEtat);
+            $sortie->setEtat($etat);
+        } else {
+            exit("Aucune etat n'existe");
+        }
 
         $sortie->setNom($faker->words(5, true));
         $sortie->setInfosSortie($faker->paragraph(3));//paragraphe de 3 phrase a +-40% prés
@@ -50,12 +59,6 @@ class SortieFixtures
             $sortie->setOrganisateur($faker->randomElement($existingOrganisateur));
         } else {
             exit("Aucune organisateur(participant) n'existe");
-        }
-
-        if (!empty($existingEtat)) {
-            $sortie->setEtat($faker->randomElement($existingEtat));
-        } else {
-            exit("Aucune etat n'existe");
         }
 
         if (!empty($existingLieu)) {
@@ -86,11 +89,11 @@ class SortieFixtures
         $passeOuFutur = $faker->numberBetween(1,100);
         if ($this->pourcentSortiePasse > $passeOuFutur){ 
             //cas sortie dans le passée
-            $DateHeureDebut = $faker->dateTimeAD();
-            $DateLimiteInscription = $faker->dateTimeAD($DateHeureDebut);
+            $DateHeureDebut = $faker->dateTimeBetween('-2 years', 'now');
+            $DateLimiteInscription = $faker->dateTimeBetween('-3 years', '-2years');
             $sortie->setDateHeureDebut($DateHeureDebut);
             $sortie->setDateLimiteInscription($DateLimiteInscription);
-        } elseif (($this->pourcentSortiePasse <= $passeOuFutur) && ($this->pourcentSortiepresente > $passeOuFutur)){
+        } elseif ($this->pourcentSortiepresente > $passeOuFutur){
             //cas sortie dans le présent
             $DateHeureDebut = $faker->dateTimeBetween('now', '+2 week');
             $DateLimiteInscription = $faker->dateTimeBetween('-2 week', 'now');

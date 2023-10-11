@@ -49,10 +49,36 @@ class SortieRepository extends ServiceEntityRepository
        ;
    }
 
+   public function defaultSearch($utilisateurConnecte ){
+    $request = $this->createQueryBuilder('s');
+
+    //n'afficher de base aucune sortie en id = 1 (Créée) a pars celle dont je suis l'organisateur
+    $request->andWhere(
+        $request->expr()->orX(
+            $request->expr()->neq('s.etat', 1), //id = 1 -> Créée
+            $request->expr()->eq('s.organisateur', ':utilisateurConnecte')
+        )
+    )
+    ->setParameter('utilisateurConnecte', $utilisateurConnecte);
+
+    $request->orderBy('s.dateHeureDebut', 'DESC');
+
+    return $request->getQuery()->getResult();
+   }
+
     public function findWithForm($form, $utilisateurConnecte )
     {
 
         $request = $this->createQueryBuilder('s');
+
+        //n'afficher de base aucune sortie en id = 1 (Créée) a pars celle dont je suis l'organisateur
+        $request->andWhere(
+            $request->expr()->orX(
+                $request->expr()->neq('s.etat', 1), //id = 1 -> Créée
+                $request->expr()->eq('s.organisateur', ':utilisateurConnecte')
+            )
+        )
+        ->setParameter('utilisateurConnecte', $utilisateurConnecte);
 
         // Filtrer par campus
         if ($form->get('campus')->getData() != null) {
@@ -104,7 +130,7 @@ class SortieRepository extends ServiceEntityRepository
             ->setParameter('val', 6); //id = 6 -> historisée
         }
 
-        $request->orderBy('s.dateHeureDebut', 'ASC');
+        $request->orderBy('s.dateHeureDebut', 'DESC');
 
         return $request->getQuery()->getResult();
     }

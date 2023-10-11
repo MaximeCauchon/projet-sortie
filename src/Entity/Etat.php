@@ -14,9 +14,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Etat
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
+    private int $id;
 
     #[ORM\Column(length: 255)]
 	#[Assert\NotBlank(message:"Veuillez renseigner un libellé pour cet état !")]
@@ -26,14 +25,20 @@ class Etat
     #[ORM\OneToMany(mappedBy: 'etat', targetEntity: Sortie::class)]
     private Collection $sorties;
 
-    public function __construct()
+    public function __construct(int $id)
     {
+        $this->id = $id;
         $this->sorties = new ArrayCollection();
     }
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function setId(int $id)
+    {
+        $this->id = $id;
     }
 
     public function getLibelle(): ?string
