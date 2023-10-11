@@ -55,6 +55,7 @@
 								</a>
 							</td>
 							<td class="p-2 border border-slate-400 space-x-6">
+							{# TODO changer le libelle pour l'id #}
 								{% if sortie.etat.libelle not in ["Créée", "Historisée"] %}
 									<a href="{{path('details_sortie', {id : sortie.id})}}">Afficher
 									</a>

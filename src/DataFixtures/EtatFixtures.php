@@ -13,32 +13,32 @@ class EtatFixtures
     public function load(ObjectManager $manager): void
     {
         $creee = new Etat();
-        $creee->setLibelle("ouverte"); 
+        $creee->setLibelle("Créée"); 
         $manager->persist($creee);
 
         $ouverte = new Etat();
-        $ouverte->setLibelle("ouverte");
+        $ouverte->setLibelle("Ouverte");
         $manager->persist($ouverte); 
 
         $cloturee = new Etat();
-        $cloturee->setLibelle("cloturee");
+        $cloturee->setLibelle("Clôturée");
         $manager->persist($cloturee); 
 
         $activiteEnCours = new Etat();
-        $activiteEnCours->setLibelle("activiteEnCours");
+        $activiteEnCours->setLibelle("En cours");
         $manager->persist($activiteEnCours); 
 
         $passee = new Etat();
-        $passee->setLibelle("passee");
-        $manager->persist($passee); 
-
-        $annulee = new Etat();
-        $annulee->setLibelle("annulee");
-        $manager->persist($annulee); 
+        $passee->setLibelle("Passée");
+        $manager->persist($passee);
 
         $historisee = new Etat();
-        $historisee->setLibelle("historisee");
+        $historisee->setLibelle("Historisée");
         $manager->persist($historisee); 
+
+        $annulee = new Etat();
+        $annulee->setLibelle("Annulée");
+        $manager->persist($annulee); 
 
     $manager->flush();
         

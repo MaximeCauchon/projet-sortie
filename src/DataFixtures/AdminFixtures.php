@@ -6,6 +6,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Persistence\ObjectManager;
 use App\Entity\Participant;
+use App\Entity\Campus;
 use Faker;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
@@ -22,7 +23,7 @@ class AdminFixtures
     public function load(ObjectManager $manager): void
     {
 
-        $existingCampus = $manager->getRepository(campus::class)->findAll(); //retourne un tableau des objets Ville de la db
+        $existingCampus = $manager->getRepository(Campus::class)->findAll(); //retourne un tableau des objets Ville de la db
         $faker = Faker\Factory::create('fr_FR');
 
         $Participant = new Participant();
