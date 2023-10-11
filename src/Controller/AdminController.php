@@ -93,38 +93,45 @@ class AdminController extends AbstractController
 			$file = $uploadParticipantViaCsvForm->get('filePart')->getData();
 			$campus = $uploadParticipantViaCsvForm->get('campus')->getData();
 			$count = 0;
-			
-			if (($handle = fopen($file->getPathname(), "r")) !== false) {
-				// Read and process the lines.
-				// Skip the first line if the file includes a header
-				while (($data = fgetcsv($handle)) !== false) {
-					if ($count == 0) {
-						$nameCol = $data;
-						dump($nameCol);
-					} else {
-						// Do the processing: Map line to entity, validate if needed
-						$part = new Participant();
-						$part->setCampus($campus);
-						$part->setRoles([]);
-						$part->setIsActif(true);
+			try {
+				if (($handle = fopen($file->getPathname(), "r")) !== false) {
+					// Read and process the lines.
+					// Skip the first line if the file includes a header
+					while (($data = fgetcsv($handle)) !== false) {
+						if ($count == 0) {
+							$nameCol = $data;
+							dump($nameCol);
+						} else {
+							// Do the processing: Map line to entity, validate if needed
+							$part = new Participant();
+							$part->setCampus($campus);
+							$part->setRoles([]);
+							$part->setIsActif(true);
 
-						$part->setNom($data[array_search('nom', $nameCol)]);
-						$part->setPrenom($data[array_search('prenom', $nameCol)]);
-						$part->setPseudo($data[array_search('pseudo', $nameCol)]);
-						$part->setEmail($data[array_search('email', $nameCol)]);
-						$part->setTelephone($data[array_search('telephone', $nameCol)]);
-						$part->setPassword($data[array_search('password', $nameCol)]);
-						// Assign fields
-						$em->persist($part);
+							$part->setNom($data[array_search('nom', $nameCol)]);
+							$part->setPrenom($data[array_search('prenom', $nameCol)]);
+							$part->setPseudo($data[array_search('pseudo', $nameCol)]);
+							$part->setEmail($data[array_search('email', $nameCol)]);
+							$part->setTelephone($data[array_search('telephone', $nameCol)]);
+							$part->setPassword($data[array_search('password', $nameCol)]);
+							// Assign fields
+							$em->persist($part);
+						}
+						$count++;
 					}
-					$count++;
+					fclose($handle);
+					$em->flush();
 				}
-				fclose($handle);
-				$em->flush();
+				$this->addFlash('success', $count - 1 . " participants ont été ajoutés dans le campus " . $campus->getNom() . ".");
+			} catch (\Exception $e) {
+				if ($e->getCode() == 1062) {
+					$this->addFlash('error', "Une erreur s'est produite : " . $e->getPrevious()->getPrevious()->errorInfo[2]);
+				} else {
+					$this->addFlash('error', "Une erreur s'est produite : " . $e->getMessage());
+				}
 			}
 
 
-			$this->addFlash('success', $count-1 ." participants ont été ajoutés dans le campus ". $campus->getNom() .".");
 		}
 		$participants = $partRepo->findBy([], ['nom' => 'ASC', 'prenom' => 'ASC']);
 
