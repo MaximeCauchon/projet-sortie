@@ -183,9 +183,8 @@ class SortieController extends AbstractController
 	}
 
 	#[Route('/details-sortie/{id}', name: 'details_sortie')]
-	public function showSortie(int $id, SortieRepository $sortieRepository): Response
+	public function showSortie(Sortie $sortie): Response
 	{
-		$sortie = $sortieRepository->find($id);
 		if (!$sortie) {
 			$this->addFlash('warning', 'Cette sortie n\'existe pas.');
 			return $this->redirectToRoute('app_affichage_sorties');
