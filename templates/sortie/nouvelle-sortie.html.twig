@@ -154,12 +154,20 @@
                             fetch(`/get-detail-lieu/${selectedLieuId}`, {method: 'GET'}).then(response => response.json()).then(data => {
                                 if (data.rue) {
                                     document.querySelector("#rue").textContent = `Adresse : ${data.rue}`;
+                                } else {
+                                    document.querySelector("#rue").textContent = `Adresse :`;
                                 }
+
                                 if (data.longitude) {
                                     document.querySelector("#longitude").textContent = `longitude : ${data.longitude}`;
+                                } else {
+                                    document.querySelector("#longitude").textContent = `longitude : `;
                                 }
+                                
                                 if (data.latitude) {
                                     document.querySelector("#latitude").textContent = `latitude : ${data.latitude}`;
+                                } else {
+                                    document.querySelector("#latitude").textContent = `latitude :`;
                                 }
                             })
                         });
