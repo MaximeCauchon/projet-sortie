@@ -5,6 +5,8 @@ namespace App\Form;
 use App\Entity\Lieu;
 use App\Entity\Ville;
 use App\Entity\Sortie;
+use App\Repository\LieuRepository;
+use App\Repository\VilleRepository;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
@@ -16,8 +18,8 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
-use Symfony\Component\Form\Extension\Core\Type\DateIntervalType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\DateIntervalType;
 
 class ModifSortieType extends AbstractType
 {
@@ -68,7 +70,11 @@ class ModifSortieType extends AbstractType
                 'label' => 'Ville :',
                 'class' => Ville::class,
                 'choice_label' => 'nom',
-                'mapped' => false
+                'mapped' => false,
+                'query_builder' => function (VilleRepository $repository) {
+                    return $repository->createQueryBuilder('v')
+                        ->orderBy('v.nom', 'ASC'); // Tri par ordre alphabétique
+                },
             ])
 
             ->add('lieu', EntityType::class, [
@@ -77,6 +83,10 @@ class ModifSortieType extends AbstractType
                 'choice_label' => 'nom',
                 'choice_label' => 'nom',
                 'placeholder' => '-- Sélectionner un lieu --',
+                'query_builder' => function (LieuRepository $repository) {
+                    return $repository->createQueryBuilder('l')
+                        ->orderBy('l.nom', 'ASC'); // Tri par ordre alphabétique
+                },
             ])
 
             ->add('enregistrer', SubmitType::class, ['label' => 'Enregistrer'])
@@ -95,6 +105,10 @@ class ModifSortieType extends AbstractType
                 'choice_label' => 'nom',
                 'placeholder' => '-- Sélectionner une ville --',
                 'mapped' => false,
+                'query_builder' => function (VilleRepository $repository) {
+                    return $repository->createQueryBuilder('v')
+                        ->orderBy('v.nom', 'ASC'); // Tri par ordre alphabétique
+                },
                 'data' => $ville,
             ]);
         });
