@@ -25,6 +25,7 @@ class RechercheSortiesType extends AbstractType
                 'class' => Campus::class,
                 'required' => false, 
                 'label' => 'Rechercher par campus', 
+                'placeholder' => 'Tous les campus', 
                 'choice_label' => 'nom'
             ])
             ->add('nom', TextType::class, [

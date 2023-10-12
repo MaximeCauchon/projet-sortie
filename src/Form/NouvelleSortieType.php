@@ -7,20 +7,22 @@ use App\Entity\Lieu;
 use App\Entity\Ville;
 use App\Entity\Sortie;
 
+use App\Repository\LieuRepository;
+use App\Repository\VilleRepository;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
-use Symfony\Component\Form\Extension\Core\Type\DateIntervalType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\DateIntervalType;
 
 class NouvelleSortieType extends AbstractType
 {
@@ -73,7 +75,11 @@ class NouvelleSortieType extends AbstractType
 				'choice_label' => 'nom',
 				'placeholder' => '-- Sélectionner une ville --',
 				'placeholder_attr' =>
-					['disabled' => 'disabled'],
+				['disabled' => 'disabled'],
+				'query_builder' => function (VilleRepository $repository) {
+                    return $repository->createQueryBuilder('v')
+                        ->orderBy('v.nom', 'ASC');
+				},
 				'mapped' => false
 			])
 
@@ -91,14 +97,20 @@ class NouvelleSortieType extends AbstractType
 			FormEvents::POST_SUBMIT,
 			function (FormEvent $event) {
 				$form = $event->getForm();
+				$ville = $form->getData();
 				$form->getParent()->add('lieu', EntityType::class, [
 					'class' => Lieu::class,
 					'label' => 'Lieu :',
 					'choice_label' => 'nom',
 					'placeholder' => '-- Sélectionner un lieu --',
-					'placeholder_attr' =>
-					['disabled' => 'disabled'],
-					'choices' => $form->getData()->getLieux()
+
+					'query_builder' => function (LieuRepository $repository) use ($ville) {
+						return $repository->createQueryBuilder('l')
+							->where('l.ville = :ville')
+							->setParameter('ville', $ville)
+							->orderBy('l.nom', 'ASC'); // Tri des lieux par nom
+					},
+					'required' => false,
 				]);
 			}
 		);

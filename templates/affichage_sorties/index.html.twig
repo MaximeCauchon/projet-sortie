@@ -5,7 +5,7 @@
 
 {% block body %}
 
-	{# TODO cas admin, affichage des options #}
+    {# TODO cas admin, affichage des options #}
 
 	<main class="container flex flex-col px-12 m-4 space-y-4">
 		<div>
@@ -80,25 +80,24 @@
 								{% endif %}
 
 
-								{% if sortie.etat.libelle == "Créée" and app.user.participantOrganisateurSortie(sortie)%}
-									<a href="{{path('modifier_sortie', {id : sortie.id})}}">Modifier
-									</a>
-									<a href="{{path('publier_sortie', {id : sortie.id})}}">Publier
-									</a>
-									<a href="{{path('supprimer_sortie', {id : sortie.id})}}">Supprimer
-									</a>
-								{% endif %}
-								{% if 
-                            sortie.etat.libelle in ["Ouverte", "Clôturée"]
-                            and app.user.participantOrganisateurSortie(sortie)
-                        %}
-									<a href="{{path('annuler_sortie', {id : sortie.id})}}">Annuler
-									</a>
-								{% endif %}
-							</td>
-						</tr>
-					{% endfor %}
-				</tbody>
+                            {% if sortie.etat.libelle == "Créée" and app.user.participantOrganisateurSortie(sortie) %}
+                                <a href="{{ path('modifier_sortie', {id : sortie.id}) }}">Modifier
+                                </a>
+                                <a href="{{ path('publier_sortie', {id : sortie.id}) }}">Publier
+                                </a>
+                                <a href="{{ path('supprimer_sortie', {id : sortie.id}) }}">Supprimer
+                                </a>
+                            {% endif %}
+                            {% if
+                                sortie.etat.libelle in ["Ouverte", "Clôturée"]
+                                and (app.user.participantOrganisateurSortie(sortie) or is_granted("ROLE_ADMIN")) %}
+                                <a href="{{ path('annuler_sortie', {id : sortie.id}) }}">Annuler
+                                </a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
 
 			</table>
 		</div>
