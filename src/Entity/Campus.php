@@ -17,7 +17,7 @@ class Campus
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 50)]
 	#[Assert\NotBlank(message:"Veuillez renseigner un nom au campus !")]
 	// #[Assert\Unique(message:"Ce nom existe déjà")]
     //TODO: régler le conflit de la ligne commenté avec le formulaire de recheche de sortie(RechecheSortieType)

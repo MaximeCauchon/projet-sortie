@@ -40,12 +40,12 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
 	#[Assert\Type('string')]
 	private ?string $password = null;
 
-	#[ORM\Column(length: 255)]
+	#[ORM\Column(length: 100)]
 	#[Assert\NotBlank(message: "Veuillez renseigner un nom pour ce participant !")]
 	#[Assert\Type('string')]
 	private ?string $nom = null;
 
-	#[ORM\Column(length: 255)]
+	#[ORM\Column(length: 100)]
 	#[Assert\NotBlank(message: "Veuillez renseigner un prénom pour ce participant !")]
 	#[Assert\Type('string')]
 	private ?string $prenom = null;

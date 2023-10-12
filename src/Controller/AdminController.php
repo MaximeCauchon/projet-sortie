@@ -144,6 +144,11 @@ class AdminController extends AbstractController
 	#[Route(path: '/gestionParticipants/isActif/{id}', name: 'gestionParticipants_isActif')]
 	public function gestionParticipants_isActif(Participant $p, Request $request, EntityManagerInterface $entityManager, EtatRepository $etatRepo)
 	{
+		if ($this->getUser()->getUserIdentifier() == $p->getUserIdentifier()){
+			$this->addFlash('warning', 'Vous n\'êtes pas autorisé à vous désactiver vous-même.');
+			return $this->redirectToRoute('admin_gestionParticipants');
+		}
+
 		if ($p->isIsActif()) {
 			$message = $p->desinscriptionDeTousLesEvenementsFuturs();
 			if ($message != "") {
@@ -165,6 +170,10 @@ class AdminController extends AbstractController
 	#[Route(path: '/gestionParticipants/isAdmin/{id}', name: 'gestionParticipants_isAdmin')]
 	public function gestionParticipants_isAdmin(Participant $p, Request $request, EntityManagerInterface $entityManager)
 	{
+		if ($this->getUser()->getUserIdentifier() == $p->getUserIdentifier()){
+			$this->addFlash('warning', 'Vous n\'êtes pas autorisé à vous retirer vos propre droits administrateur.');
+			return $this->redirectToRoute('admin_gestionParticipants');
+		}
 		if ($p->isAdmin()) {
 //			On retire les droit d'administration
 			$p->setRoles([]);
@@ -185,6 +194,11 @@ class AdminController extends AbstractController
 	#[Route(path: '/gestionParticipants/supp/{id}', name: 'gestionParticipants_supp')]
 	public function gestionParticipants_supp(Participant $p, ParticipantRepository $partRepo, Request $request, EntityManagerInterface $entityManager, EtatRepository $etatRepo)
 	{
+		if ($this->getUser()->getUserIdentifier() == $p->getUserIdentifier()){
+			$this->addFlash('warning', 'Vous n\'êtes pas autorisé à supprimer votre propre compte car vous êtes administrateur.');
+			return $this->redirectToRoute('admin_gestionParticipants');
+		}
+
 		$message = $p->desinscriptionDeTousLesEvenementsFuturs();
 		if ($message != "") {
 			$this->addFlash('success', $message);
