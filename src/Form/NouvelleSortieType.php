@@ -103,7 +103,7 @@ class NouvelleSortieType extends AbstractType
 					'label' => 'Lieu :',
 					'choice_label' => 'nom',
 					'placeholder' => '-- Sélectionner un lieu --',
-					'placeholder_attr' => ['disabled' => 'disabled'],
+
 					'query_builder' => function (LieuRepository $repository) use ($ville) {
 						return $repository->createQueryBuilder('l')
 							->where('l.ville = :ville')
