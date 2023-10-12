@@ -3,6 +3,7 @@
 {% block title %}Mot de passe oublié{% endblock %}
 
 {% block body %}
+<main class="container flex flex-col md:px-12 px-4 m-4 space-y-4">
     {% for flash_error in app.flashes('reset_password_error') %}
         <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
     {% endfor %}
@@ -14,4 +15,5 @@
 
     <button class="btn btn-primary">Réupérer le lien de réinitialisation de mot de passe</button>
     {{ form_end(requestForm) }}
+</main>
 {% endblock %}

@@ -3,10 +3,13 @@
 {% block title %} | Gestion des participants{% endblock %}
 
 {% block body %}
+<main class="container flex flex-col md:px-12 px-4 m-4 space-y-4">
     <div class="container mx-auto px-4">
         <h1>Gestion des Participants</h1>
 
-        <a href="{{ path('admin_register') }}" class="bg-slate-600 hover:bg-slate-900 text-white font-bold py-2 px-4 rounded ">Créer un participant</a>
+        <div class="m-3">
+            <a href="{{ path('admin_register') }}" class="bg-amber-500 border w-fit px-4 py-2 text-slate-100 rounded-xl">Créer un participant</a>
+        </div>
 
         <h3>Charger un fichier de participants</h3>
 
@@ -20,44 +23,46 @@
         {{ form_end(uploadParticipantViaCsvForm) }}
 
 
-        <table class="my-3 border-collapse border-2 border-slate-700">
-            <thead class="bg-slate-600 text-white">
-            <tr>
-                <th class="p-2 border-2 border-slate-700">Pseudo</th>
-                <th class="p-2 border-2 border-slate-700">Nom</th>
-                <th class="p-2 border-2 border-slate-700">Prénom</th>
-                <th class="p-2 border-2 border-slate-700">Campus</th>
-                <th class="p-2 border-2 border-slate-700">Email</th>
-                <th class="p-2 border-2 border-slate-700">Téléphone</th>
-                <th class="p-2 border-2 border-slate-700">Rôles</th>
-                <th class="p-2 border-2 border-slate-700">Inactif</th>
-                <th class="p-2 border-2 border-slate-700">Action</th>
-            </tr>
+        <table class="w-full flex flex-row flex-no-wrap sm:bg-white rounded-lg overflow-hidden sm:shadow-lg my-5">
+            <thead class="text-white">
+            {% for p in participants %}
+                <tr class=" bg-amber-500 flex flex-col flex-no wrap sm:table-row rounded-l-lg sm:rounded-none mb-2 sm:mb-0">
+                    <th class="p-2 border-2 h-10">Pseudo</th>
+                    <th class="p-2 border-2 h-10">Nom</th>
+                    <th class="p-2 border-2 h-10">Prénom</th>
+                    <th class="p-2 border-2 h-10">Campus</th>
+                    <th class="p-2 border-2 h-10">Email</th>
+                    <th class="p-2 border-2 h-10">Téléphone</th>
+                    <th class="p-2 border-2 h-10">Rôles</th>
+                    <th class="p-2 border-2 h-10">Inactif</th>
+                    <th class="p-2 border-2 h-10">Action</th>
+                </tr>
+            {% endfor %}
             </thead>
-            <tbody>
+            <tbody class="flex-1 sm:flex-none">
             {% for p in participants %}
 
-                <tr>
-                    <td class="p-2 border border-slate-400">{{ p.pseudo }}</td>
-                    <td class="p-2 border border-slate-400">{{ p.nom }}</td>
-                    <td class="p-2 border border-slate-400">{{ p.prenom }}</td>
-                    <td class="p-2 border border-slate-400">{{ p.campus.nom }}</td>
-                    <td class="p-2 border border-slate-400">{{ p.email }}</td>
-                    <td class="p-2 border border-slate-400">{{ p.telephone }}</td>
-                    <td class="p-2 border border-slate-400">
+                <tr class="flex flex-col flex-no wrap sm:table-row mb-2 sm:mb-0">
+                    <td class="border-grey-light border hover:bg-gray-100 p-3 h-10">{{ p.pseudo }}</td>
+                    <td class="border-grey-light border hover:bg-gray-100 p-3 h-10">{{ p.nom }}</td>
+                    <td class="border-grey-light border hover:bg-gray-100 p-3 h-10">{{ p.prenom }}</td>
+                    <td class="border-grey-light border hover:bg-gray-100 p-3 h-10">{{ p.campus.nom }}</td>
+                    <td class="border-grey-light border hover:bg-gray-100 p-3 h-10">{{ p.email }}</td>
+                    <td class="border-grey-light border hover:bg-gray-100 p-3 h-10">{{ p.telephone }}</td>
+                    <td class="border-grey-light border hover:bg-gray-100 p-3 h-10">
                         {% if p.isAdmin %}
                             Admin
                         {% endif %}
 
                     </td>
-                    <td class="p-2 border border-slate-400">
+                    <td class="border-grey-light border hover:bg-gray-100 p-3 h-10">
                         {% if not p.isActif %}
                             Compte désactivé
                         {% endif %}
 
                     </td>
 
-                    <td class="p-2 border border-slate-400">
+                    <td class="border-grey-light border hover:bg-gray-100 p-3 h-10">
                         <a href="{{ path('admin_gestionParticipants_isActif', {'id' : p.id}) }}">
                             {% if p.isActif %}
                             Désactiver le compte
@@ -65,7 +70,7 @@
                                 Réactiver le compte
                                 {% endif %}
                         </a>
-<br>
+                        <br>
                         <a href="{{ path('admin_gestionParticipants_isAdmin', {'id' : p.id}) }}">
                             {% if p.isAdmin %}
                                 Retirer les droits d'administration
@@ -77,9 +82,6 @@
                         <a href="{{ path('admin_gestionParticipants_supp', {'id' : p.id}) }}">
                             Supprimer
                         </a>
-                        {#                            <a href="{{ path('admin_gestionParticipants_isActif', {'id' : p.id}) }}">Désactiver</a> #}
-                        {#                            <a href="{{ path('admin_gestionParticipants_admin', {'id' : p.id}) }}">Désactiver</a> #}
-                        {#                            <a href="{{ path('admin_gestionParticipants_Supp', {'id' : p.id}) }}">Supprimer</a> #}
                     </td>
                 </tr>
             {% endfor %}
@@ -88,4 +90,5 @@
         </table>
 
     </div>
+</main>
 {% endblock %}

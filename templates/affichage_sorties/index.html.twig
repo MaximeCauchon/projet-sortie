@@ -7,7 +7,7 @@
 
     {# TODO cas admin, affichage des options #}
 
-	<main class="container flex flex-col px-12 m-4 space-y-4">
+	<main class="container flex flex-col md:px-12 px-4 m-4 space-y-4">
 		<div>
 			<p>date du jour:
 				{{ "now"|date("m/d/Y") }}</p>
@@ -16,7 +16,7 @@
 				{{ app.user.nom|first|upper }}.</p>
 		</div>
 
-		<div class="my-4">
+		<div class="my-4 m-3">
 			<a class="bg-amber-500 border w-fit px-4 py-2 text-slate-100 rounded-xl" href="{{ path("nouvelle_sortie") }}">Créer une sortie</a>
 		</div>
 

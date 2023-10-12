@@ -3,34 +3,37 @@
 {% block title %} | Gestion des villes{% endblock %}
 
 {% block body %}
+<main class="container flex flex-col md:px-12 px-4 m-4 space-y-4">
     <div class="container mx-auto px-4">
         <h1>Gestion des Villes</h1>
-        <table class="table-auto">
-            <thead>
-            <tr>
-                <th>Ville</th>
-                <th>Code Postal</th>
-                <th>Actions</th>
-            </tr>
+        <table class="w-full flex flex-row flex-no-wrap sm:bg-white rounded-lg overflow-hidden sm:shadow-lg my-5">
+            <thead class="text-white">
+            {% for v in villes %}
+                <tr class=" bg-amber-500 flex flex-col flex-no wrap sm:table-row rounded-l-lg sm:rounded-none mb-2 sm:mb-0">
+                    <th class="p-2 border-2 h-10">Ville</th>
+                    <th class="p-2 border-2 h-10">CP</th>
+                    <th class="p-2 border-2 h-10">Actions</th>
+                </tr>
+            {% endfor %}
             </thead>
-            <tbody>
+            <tbody class="flex-1 sm:flex-none">
             {% for v in villes %}
                 {% if maVilleAModifier and v.id == maVilleAModifier.id %}
                     {{ form_start(editVilleForm) }}
-                    <tr>
-                        <td> {{ form_widget(editVilleForm.nom) }}</td>
-                        <td> {{ form_widget(editVilleForm.codePostal) }}</td>
-                        <td>
+                    <tr class="flex flex-col flex-no wrap sm:table-row mb-2 sm:mb-0">
+                        <td class="border-grey-light border hover:bg-gray-100 p-3 h-10"> {{ form_widget(editVilleForm.nom) }}</td>
+                        <td class="border-grey-light border hover:bg-gray-100 p-3 h-10"> {{ form_widget(editVilleForm.codePostal) }}</td>
+                        <td class="border-grey-light border hover:bg-gray-100 p-3 h-10">
                             <button>Modifier</button>
                             <a href="{{ path('admin_gestionVilles') }}">Annuler</a>
                         </td>
                     </tr>
                     {{ form_end(editVilleForm) }}
                 {% else %}
-                    <tr>
-                        <td>{{ v.nom }}</td>
-                        <td>{{ v.codePostal }}</td>
-                        <td>
+                    <tr class="flex flex-col flex-no wrap sm:table-row mb-2 sm:mb-0">
+                        <td class="border-grey-light border hover:bg-gray-100 p-3 h-10">{{ v.nom }}</td>
+                        <td class="border-grey-light border hover:bg-gray-100 p-3 h-10">{{ v.codePostal }}</td>
+                        <td class="border-grey-light border hover:bg-gray-100 p-3 h-10">
                             <a href="{{ path('admin_gestionVilles_Edit', {'id' : v.id}) }}">Modifier</a>
                             <a href="{{ path('admin_gestionVilles_Supp', {'id' : v.id}) }}">Supprimer</a>
                         </td>
@@ -40,10 +43,10 @@
 
             {% if newVilleForm %}
                 {{ form_start(newVilleForm) }}
-                <tr>
-                    <td> {{ form_widget(newVilleForm.nom) }}</td>
-                    <td> {{ form_widget(newVilleForm.codePostal) }}</td>
-                    <td>
+                <tr class="flex flex-col flex-no wrap sm:table-row mb-2 sm:mb-0">
+                    <td class="border-grey-light border hover:bg-gray-100 p-3 h-10"> {{ form_widget(newVilleForm.nom) }}</td>
+                    <td class="border-grey-light border hover:bg-gray-100 p-3 h-10"> {{ form_widget(newVilleForm.codePostal) }}</td>
+                    <td class="border-grey-light border hover:bg-gray-100 p-3 h-10">
                         <button>Créer</button>
                     </td>
                 </tr>
@@ -53,4 +56,5 @@
             </tbody>
         </table>
     </div>
+</main>
 {% endblock %}

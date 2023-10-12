@@ -3,6 +3,7 @@
 {% block title %}Register{% endblock %}
 
 {% block body %}
+<main class="container flex flex-col md:px-12 px-4 m-4 space-y-4">
     <h1>Créer un participant</h1>
 
     {{ form_errors(registrationForm) }}
@@ -13,4 +14,5 @@
         <button type="submit" class="btn">Créer un participant</button>
     
     {{ form_end(registrationForm) }}
+</main>
 {% endblock %}

@@ -1,12 +1,13 @@
 <h2>Ajouter un lieu :</h2>
 
 {{ form_start(nouveauLieuForm) }}
-<div class="space-y-3">
-	{{ form_row(nouveauLieuForm.nom) }}
-	{{ form_row(nouveauLieuForm.rue) }}
-	{{ form_row(nouveauLieuForm.latitude) }}
-	{{ form_row(nouveauLieuForm.longitude) }}
-	{{ form_row(nouveauLieuForm.ville) }}
-</div>
-
+<main class="container flex flex-col md:px-12 px-4 m-4 space-y-4">
+	<div class="space-y-3">
+		{{ form_row(nouveauLieuForm.nom) }}
+		{{ form_row(nouveauLieuForm.rue) }}
+		{{ form_row(nouveauLieuForm.latitude) }}
+		{{ form_row(nouveauLieuForm.longitude) }}
+		{{ form_row(nouveauLieuForm.ville) }}
+	</div>
+</main>
 {{ form_end(nouveauLieuForm) }}
