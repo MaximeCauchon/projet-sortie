@@ -15,46 +15,53 @@
 				{{ app.user.prenom }}
 				{{ app.user.nom|first|upper }}.</p>
 		</div>
+
+		<div class="my-4">
+			<a class="bg-amber-500 border w-fit px-4 py-2 text-slate-100 rounded-xl" href="{{ path("nouvelle_sortie") }}">Créer une sortie</a>
+		</div>
+
 		<div class="space-y-2">
 			{{ form_errors(rechercheForm) }}
 			{{ form_start(rechercheForm) }}
 			{{ form_widget(rechercheForm) }}
 			{{ form_end(rechercheForm) }}
 		</div>
-		<div>
-			<table class="my-3 border-collapse border-2 border-slate-700">
-				<thead class=" bg-slate-600 text-white">
-					<tr>
-						<th class="p-2 border-2 border-slate-700">Nom de la sortie</th>
-						<th class="p-2 border-2 border-slate-700">Date de la sortie</th>
-						<th class="p-2 border-2 border-slate-700">Clôture</th>
-						<th class="p-2 border-2 border-slate-700">Inscrits/places</th>
-						<th class="p-2 border-2 border-slate-700">Etat</th>
-						<th class="p-2 border-2 border-slate-700">Inscrit</th>
-						<th class="p-2 border-2 border-slate-700">Organisateur</th>
-						<th class="p-2 border-2 border-slate-700">Actions</th>
+		<div class="container">
+			<table class="w-full flex flex-row flex-no-wrap sm:bg-white rounded-lg overflow-hidden sm:shadow-lg my-5">
+				<thead class="text-white">
+				{% for sortie in sorties %}
+					<tr class=" bg-amber-500 flex flex-col flex-no wrap sm:table-row rounded-l-lg sm:rounded-none mb-2 sm:mb-0">
+						<th class="p-2 border-2 h-20">Nom de la sortie</th>
+						<th class="p-2 border-2 h-10">Date de la sortie</th>
+						<th class="p-2 border-2 h-10">Clôture</th>
+						<th class="p-2 border-2 h-10">Inscrits/places</th>
+						<th class="p-2 border-2 h-10">Etat</th>
+						<th class="p-2 border-2 h-10">Inscrit</th>
+						<th class="p-2 border-2 h-10">Organisateur</th>
+						<th class="p-2 border-2 h-10">Actions</th>
 					</tr>
+				{% endfor %}	
 				</thead>
-				<tbody class="text-center">
+				<tbody class="flex-1 sm:flex-none">
 					{% for sortie in sorties %}
-						<tr>
-							<td class="p-2 border border-slate-400">{{ sortie.nom }}</td>
-							<td class="p-2 border border-slate-400">{{ sortie.dateHeureDebut|date('d/m/y : h:m') }}</td>
-							<td class="p-2 border border-slate-400">{{ sortie.dateLimiteInscription|date('d/m') }}</td>
-							<td class="p-2 border border-slate-400">{{ sortie.nombreInscrit()}}/{{ sortie.nbInscriptionMax }}</td>
-							<td class="p-2 border border-slate-400">{{ sortie.etat.libelle }}</td>
-							<td class="p-2 border border-slate-400 text-center">
+						<tr class="flex flex-col flex-no wrap sm:table-row mb-2 sm:mb-0">
+							<td class="border-grey-light border hover:bg-gray-100 p-3 h-20">{{ sortie.nom }}</td>
+							<td class="border-grey-light border hover:bg-gray-100 p-3 h-10">{{ sortie.dateHeureDebut|date('d/m/y : h:m') }}</td>
+							<td class="border-grey-light border hover:bg-gray-100 p-3 h-10">{{ sortie.dateLimiteInscription|date('d/m') }}</td>
+							<td class="border-grey-light border hover:bg-gray-100 p-3 h-10">{{ sortie.nombreInscrit()}}/{{ sortie.nbInscriptionMax }}</td>
+							<td class="border-grey-light border hover:bg-gray-100 p-3 h-10">{{ sortie.etat.libelle }}</td>
+							<td class="border-grey-light border hover:bg-gray-100 p-3 h-10">
 								{% if app.user.participantInscritSortie(sortie) %}
 									X
 								{% endif %}
 							</td>
-							<td class="p-2 border border-slate-400">
+							<td class="border-grey-light border hover:bg-gray-100 p-3 h-10">
 								<a href="{{path('participant_details', {id : sortie.organisateur.id})}}">
 									{{ sortie.organisateur.prenom }}
 									{{ sortie.organisateur.nom }}
 								</a>
 							</td>
-							<td class="p-2 border border-slate-400 space-x-6">
+							<td class="border-grey-light border hover:bg-gray-100 p-3 h-10">
 							{# TODO changer le libelle pour l'id #}
 								{% if sortie.etat.libelle not in ["Créée", "Historisée"] %}
 									<a href="{{path('details_sortie', {id : sortie.id})}}">Afficher
@@ -94,9 +101,6 @@
 				</tbody>
 
 			</table>
-		</div>
-		<div class="my-4">
-		<a class="bg-slate-600 border w-fit px-4 py-2 text-slate-100 shadow-slate-700 shadow-lg" href="{{ path("nouvelle_sortie") }}">Créer une sortie</a>
 		</div>
 	</main>
 {% endblock %}

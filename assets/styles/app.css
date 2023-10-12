@@ -3,6 +3,9 @@
 @tailwind utilities;
 
 @layer base {
+  body {
+      font-family: Poppins, sans-serif;
+  }
   /* HEADINGS */
   h1 {
     @apply text-3xl;
@@ -16,11 +19,6 @@
     @apply italic text-blue-800;
   }
 
-  /* NAVBAR */
-  .navbar a {
-    @apply border border-slate-400 rounded-md mx-2 px-4 py-2 text-black;
-  }
-
   /* FORMULAIRES */
   label {
     @apply font-semibold;
@@ -31,5 +29,34 @@
   select {
     @apply border border-blue-100 mx-2 p-1;
   }
+
+/* TABLES */
+  html,
+  body {
+    height: 100%;
+  }
+
+  td{
+    overflow: hidden;
+  }
+
+  @media (min-width: 640px) {
+    table {
+      display: inline-table !important;
+    }
+
+    thead tr:not(:first-child) {
+      display: none;
+    }
+  }
+
+  td:not(:last-child) {
+    border-bottom: 0;
+  }
+
+  th:not(:last-child) {
+    border-bottom: 2px solid rgba(0, 0, 0, .1);
+  }
+
 }
 
