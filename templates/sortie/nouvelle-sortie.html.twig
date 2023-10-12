@@ -4,14 +4,14 @@
 {% endblock %}
 
 {% block body %}
-	<main class="container flex flex-col md:px-12 px-4 lg:m-4 space-y-4">
-		<h1 class=" lg:text-center mt-12">
+	<main class="container flex flex-col md:px-12 px-4 lg:mx-auto space-y-4">
+		<h1 class=" lg:text-center mt-6 lg:mt-12">
 			Créer une sortie
 		</h1>
 
 
 		{{ form_start(nouvelleSortieForm) }}
-		<div class="lg:grid lg:grid-cols-2 mt-12 w-1/2 lg:mx-auto text-sm">
+		<div class="lg:grid lg:grid-cols-2 mt-6 lg:mt-12 w-3/4 lg:mx-auto text-sm">
 			<div class="space-y-4">
 				{{ form_row(nouvelleSortieForm.nom) }}
 				{{ form_row(nouvelleSortieForm.dateHeureDebut) }}
