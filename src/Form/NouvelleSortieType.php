@@ -20,7 +20,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\DateIntervalType;
-
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class NouvelleSortieType extends AbstractType
 {
@@ -63,7 +63,7 @@ class NouvelleSortieType extends AbstractType
 					'hours' => "heures",
 				],
 			])
-			->add('infosSortie', TextType::class, [
+			->add('infosSortie', TextareaType::class, [
 				'required' => false,
 				'label' => 'Descriptions et infos :'
 			])
