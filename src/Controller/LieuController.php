@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Lieu;
+use App\Entity\Ville;
 use App\Form\NouveauLieuType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,23 +21,39 @@ class LieuController extends AbstractController
         $this->entityManager = $entityManager;
     }
 
-    #[Route('/lieu/{id}', name: 'app_get_lieu')]
-    public function getLieu(int $id): JsonResponse
-    {
-        $lieuRepository = $this->entityManager->getRepository(Lieu::class);
-        $lieu = $lieuRepository->find($id);
+//    #[Route('/lieu/{id}', name: 'app_get_lieu')]
+//    public function getLieu(int $id): JsonResponse
+//    {
+//        $lieuRepository = $this->entityManager->getRepository(Lieu::class);
+//        $lieu = $lieuRepository->find($id);
+//
+//        if (!$lieu) {
+//            return new JsonResponse(['error' => 'Lieu non trouvé'], JsonResponse::HTTP_NOT_FOUND);
+//        }
+//
+//        $data = [
+//            'rue' => $lieu->getRue(),
+//            'latitude' => $lieu->getLatitude(),
+//            'longitude' => $lieu->getLongitude(),
+//        ];
+//
+//        return $this->json($data);
+//    }
 
-        if (!$lieu) {
-            return new JsonResponse(['error' => 'Lieu non trouvé'], JsonResponse::HTTP_NOT_FOUND);
-        }
+	#[Route('/get-detail-lieu/{id}', name: 'get-detail-lieu', methods: ['GET'])]
+	public function getDetailLieu(Lieu $lieu, EntityManagerInterface $entityManager): JsonResponse
+	{
 
-        $data = [
-            'rue' => $lieu->getRue(),
-            'latitude' => $lieu->getLatitude(),
-            'longitude' => $lieu->getLongitude(),
-        ];
+		if (!$lieu) {
+			return new JsonResponse(['error' => 'Lieu non trouvée'], 404);
+		}
 
-        return $this->json($data);
-    }
+		// Renvoyez le code postal au format JSON
+		return new JsonResponse([
+			'rue' => $lieu->getRue(),
+			'latitude' => $lieu->getLatitude(),
+			'longitude' => $lieu->getLongitude(),
+		]);
+	}
 
 }
