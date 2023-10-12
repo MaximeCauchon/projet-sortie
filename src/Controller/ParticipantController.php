@@ -103,13 +103,21 @@ class ParticipantController extends AbstractController
 	{
 		$participant = $this->getUser();
 
-		if(!$participant->participantInscritSortie($sortie) && $sortie->getEtat()->getId()==2) {
-			$sortie->addParticipant($participant);
-			$entityManager->persist($sortie);
-            $entityManager->flush();
+		$participantsInscrits = $sortie->nombreInscrit();
+
+		if ($participantsInscrits < $sortie->getNbInscriptionMax() || $sortie->getNbInscriptionMax() == null) {
+			if(!$participant->participantInscritSortie($sortie) && $sortie->getEtat()->getId()==2) {
+				$sortie->addParticipant($participant);
+				$entityManager->persist($sortie);
+				$entityManager->flush();
+			}
+			$this->addFlash('success', 'Vous êtes inscrit à la sortie.');
+			return $this->redirectToRoute('details_sortie', ['id' => $sortie->getId()]);
+		} else {
+			$this->addFlash('alert', 'La sortie est complète.');
+			return $this->redirectToRoute('details_sortie', ['id' => $sortie->getId()]);
 		}
-		$this->addFlash('success', 'Vous êtes inscrit à la sortie.');
-		return $this->redirectToRoute('details_sortie', ['id' => $sortie->getId()]);
+		
 
 	}
 

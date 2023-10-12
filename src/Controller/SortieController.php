@@ -84,14 +84,14 @@ class SortieController extends AbstractController
 
 		if ($modifSortieForm->isSubmitted() && $modifSortieForm->isValid()) {
 
-			if ($modifSortieForm->get('supprimer')->isClicked()) {
-				$sortie->supprSortie();
-			}
+            if ($modifSortieForm->get('supprimer')->isClicked()) {
+                return $this->redirectToRoute('supprimer_sortie', ['id' => $sortie->getId()]);
+            }
 
-			if ($modifSortieForm->get('publier')->isClicked()) {
-				$sortie->publierSortie();
-			}
-			$entityManager->flush();
+            if ($modifSortieForm->get('publier')->isClicked()) {
+                return $this->redirectToRoute('publier_sortie', ['id' => $sortie->getId()]);
+            }
+            $entityManager->flush();
 
 			$this->addFlash('success', 'Sortie modifiée !');
 			return $this->redirect($this->generateUrl('details_sortie', ['id' => $sortie->getId()]));
