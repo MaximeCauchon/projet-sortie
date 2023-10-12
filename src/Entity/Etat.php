@@ -17,7 +17,7 @@ class Etat
     #[ORM\Column]
     private int $id;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 50)]
 	#[Assert\NotBlank(message:"Veuillez renseigner un libellé pour cet état !")]
 	#[Assert\Unique(message:"Ce libellé existe déjà")]
 	private ?string $libelle = null;

@@ -16,7 +16,7 @@ class Lieu
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 100)]
 	#[Assert\NotBlank(message:"Veuillez renseigner un nom pour ce lieu !")]
 	private ?string $nom = null;
 

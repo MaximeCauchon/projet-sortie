@@ -39,10 +39,10 @@ class Sortie
 	#[Assert\Positive(message:'Ce chiffre ne peut être négatif ou egal à 0. Si vous ne souhaitez pas mettre de limite, ne remplissez pas le champ.')]
     private ?int $nbInscriptionMax = null;
 
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
+	#[ORM\Column(length: 65535, nullable: true)]
     private ?string $infosSortie = null;
 
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
+	#[ORM\Column(length: 65535, nullable: true)]
     private ?string $motifAnnulation = null;
 
     #[ORM\ManyToMany(targetEntity: Participant::class, mappedBy: 'estInscrit')]
