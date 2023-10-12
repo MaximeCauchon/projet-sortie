@@ -24,10 +24,19 @@
     @apply font-semibold;
   }
   input {
-    @apply border border-blue-100 mx-2 p-1;
+    @apply border border-slate-400 mx-2 px-2 py-1;
   }
   select {
-    @apply border border-blue-100 mx-2 p-1;
+    @apply border border-slate-400 mx-2 px-2 py-1;
+  }
+  textarea {
+    @apply border border-slate-400 mx-2 px-2 py-1;
+  }
+  form button {
+    @apply border border-slate-400 mx-2 px-2 py-1 shadow-lg text-zinc-50;
+  }
+  form a {
+    @apply border border-red-600 mx-2 px-2 py-1 shadow-lg;
   }
 
 /* TABLES */
