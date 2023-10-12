@@ -135,9 +135,9 @@ class SortieController extends AbstractController
 		}
 
 		$user = $this->getUser();
-		if (in_array($sortie->getEtat()->getId(), [2, 3])
-			&& ($user->participantOrganisateurSortie($sortie)
-				|| $this->isGranted("ROLE_ADMIN"))) {
+		if (!in_array($sortie->getEtat()->getId(), [2, 3])
+			|| (!$user->participantOrganisateurSortie($sortie)
+				&& !$this->isGranted("ROLE_ADMIN"))) {
 			$this->addFlash('warning', 'Vous n\'êtes pas autorisé à annuler cette sortie.');
 			return $this->redirectToRoute('app_affichage_sorties');
 		}
@@ -167,10 +167,9 @@ class SortieController extends AbstractController
 	#[Route('/publier-sortie/{id}', name: 'publier_sortie')]
 	public function publierSortie(Sortie $sortie, EntityManagerInterface $entityManager, EtatRepository $etatRepo): Response
 	{
-
 		$user = $this->getUser();
-		if (in_array($sortie->getEtat()->getId(), [1])
-			&& $user->participantOrganisateurSortie($sortie)) {
+
+		if (!in_array($sortie->getEtat()->getId(), [1]) || !$user->participantOrganisateurSortie($sortie)) {
 			$this->addFlash('warning', 'Vous n\'êtes pas autorisé à publier cette sortie.');
 			return $this->redirectToRoute('app_affichage_sorties');
 		}
