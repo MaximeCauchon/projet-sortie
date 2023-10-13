@@ -11,22 +11,23 @@
 
 
 		{{ form_start(nouvelleSortieForm) }}
+		<div class="lg:grid lg:grid-cols-2 mt-12 lg:w-1/2 lg:mx-auto text-sm">
 		<div class="lg:grid lg:grid-cols-2 mt-6 lg:mt-12 w-3/4 lg:mx-auto text-sm">
 			<div class="space-y-4">
-				{{ form_row(nouvelleSortieForm.nom) }}
-				{{ form_row(nouvelleSortieForm.dateHeureDebut) }}
-				{{ form_row(nouvelleSortieForm.dateLimiteInscription) }}
-				{{ form_row(nouvelleSortieForm.nbInscriptionMax) }}
-				{{ form_row(nouvelleSortieForm.duree) }}
-				{{ form_row(nouvelleSortieForm.infosSortie) }}
+				{{ form_row(nouvelleSortieForm.nom, {"attr": {'class': 'flex'}}) }}
+				{{ form_row(nouvelleSortieForm.dateHeureDebut, {"attr": {'class': 'flex'}}) }}
+				{{ form_row(nouvelleSortieForm.dateLimiteInscription, {"attr": {'class': 'flex'}}) }}
+				{{ form_row(nouvelleSortieForm.nbInscriptionMax, {"attr": {'class': 'flex'}}) }}
+				{{ form_row(nouvelleSortieForm.duree, {"attr": {'class': 'flex'}}) }}
+				{{ form_row(nouvelleSortieForm.infosSortie, {"attr": {'class': 'flex'}}) }}
 			</div>
-			<div class="space-y-4">
-				{{ form_row(nouvelleSortieForm.ville) }}
+			<div class="space-y-4 mt-4 lg:mt-0">
+				{{ form_row(nouvelleSortieForm.ville, {"attr": {'class': 'flex'}}) }}
 
 				<div class="flex">
-					{{ form_row(nouvelleSortieForm.lieu) }}
+					{{ form_row(nouvelleSortieForm.lieu, {"attr": {'class': 'flex'}}) }}
 					<div class="group relative" id="modal_button">
-						<button type="button" class="lg:mt-0 mt-3 transition duration-75 ease-in-out hover:bg-amber-600 bg-black rounded-full text-white px-3 text-xl" onclick="modalHandler(true)">+
+						<button type="button" class="lg:mt-4 mt-3 transition duration-75 ease-in-out hover:bg-amber-600 bg-black rounded-full text-white px-3 text-xl" onclick="modalHandler(true)">+
 						</button>
 					</div>
 				</div>
@@ -46,10 +47,10 @@
 			</div>
 		</div>
 
-		<div class="lg:flex lg:space-x-6 lg:space-y-0 lg:justify-center lg:mt-12 mt-6 space-y-1">
+		<div class="lg:flex lg:space-x-6 lg:space-y-0 lg:justify-center lg:mt-12 mt-6 space-y-2">
 			{{ form_row(nouvelleSortieForm.enregistrer, { 'attr': {'class': 'bg-amber-600 border w-fit px-4 py-2 text-slate-100 rounded-xl font-semibold'}}) }}
 			{{ form_row(nouvelleSortieForm.publier, { 'attr': {'class': 'bg-amber-600 border w-fit px-4 py-2 text-slate-100 rounded-xl font-semibold mr-12 mb-4 lg:mb-0'}}) }}
-				<a href="{{path('app_affichage_sorties') }}" class="bg-red-600 border w-fit px-4 py-2 text-slate-100 rounded-xl font-semibold">Annuler</a>
+				<a href="{{path('app_affichage_sorties') }}" class="bg-red-600 border w-fit px-4 py-2 text-slate-100 rounded-xl font-semibold shadow-lg shadow-slate-40">Annuler</a>
 		</div>
 
 

@@ -5,42 +5,58 @@
 
 {% block body %}
 
-    {# TODO cas admin, affichage des options #}
+	{# TODO cas admin, affichage des options #}
 
-	<main class="container flex flex-col md:px-12 px-4 m-4 space-y-4">
-		<div>
+	<main class="container flex flex-col md:px-12 px-4 lg:m-4 space-y-4">
+		<div class="mt-8">
 			<p>date du jour:
 				{{ "now"|date("m/d/Y") }}</p>
-			<p>Participant:
-				{{ app.user.prenom }}
-				{{ app.user.nom|first|upper }}.</p>
+			<p>
+				<strong>Participant :
+					{{ app.user.prenom }}
+					{{ app.user.nom|first|upper }}.</p>
+			</p>
 		</div>
 
-		<div class="my-4 m-3">
-			<a class="bg-amber-500 border w-fit px-4 py-2 text-slate-100 rounded-xl" href="{{ path("nouvelle_sortie") }}">Créer une sortie</a>
+		<div class="my-4">
+			<a class="bg-amber-500 border w-fit px-4 py-2 text-slate-100 rounded-xl shadow-lg shadow-slate-40" href="{{ path("nouvelle_sortie") }}">Créer une sortie</a>
 		</div>
 
-		<div class="space-y-2">
-			{{ form_errors(rechercheForm) }}
-			{{ form_start(rechercheForm) }}
-			{{ form_widget(rechercheForm) }}
-			{{ form_end(rechercheForm) }}
+		{{ form_start(rechercheForm) }}
+		<div class="mt-8 lg:grid lg:grid-cols-2 lg:w-1/2 space-y-3">
+
+			<div class="lg:flex lg:flex-col space-y-3">
+				{{ form_row(rechercheForm.campus, {"attr": {'class': 'flex'}}) }}
+				{{ form_row(rechercheForm.nom, {"attr": {'class': 'flex'}}) }}
+				{{ form_row(rechercheForm.dateDebut, {"attr": {'class': 'flex'}}) }}
+				{{ form_row(rechercheForm.dateFin, {"attr": {'class': 'flex'}}) }}
+			</div>
+			<div class="lg:flex lg:flex-col space-y-4">
+				{{ form_row(rechercheForm.organisateur) }}
+				{{ form_row(rechercheForm.inscrit) }}
+				{{ form_row(rechercheForm.nonInscrit) }}
+				{{ form_row(rechercheForm.sortiesPassees) }}
+				{{ form_row(rechercheForm.rechercher, {"attr": {'class': 'mt-2 bg-amber-500 border w-fit px-4 py-2 text-slate-100 rounded-xl'}}) }}
+			</div>
+
+			
 		</div>
-		<div class="container">
+		{{ form_end(rechercheForm) }}
+		<div class="container mt-4">
 			<table class="w-full flex flex-row flex-no-wrap sm:bg-white rounded-lg overflow-hidden sm:shadow-lg my-5">
 				<thead class="text-white">
-				{% for sortie in sorties %}
-					<tr class=" bg-amber-500 flex flex-col flex-no wrap sm:table-row rounded-l-lg sm:rounded-none mb-2 sm:mb-0">
-						<th class="p-2 border-2 h-20">Nom de la sortie</th>
-						<th class="p-2 border-2 h-10">Date de la sortie</th>
-						<th class="p-2 border-2 h-10">Clôture</th>
-						<th class="p-2 border-2 h-10">Inscrits/places</th>
-						<th class="p-2 border-2 h-10">Etat</th>
-						<th class="p-2 border-2 h-10">Inscrit</th>
-						<th class="p-2 border-2 h-10">Organisateur</th>
-						<th class="p-2 border-2 h-10">Actions</th>
-					</tr>
-				{% endfor %}	
+					{% for sortie in sorties %}
+						<tr class=" bg-amber-500 flex flex-col flex-no wrap sm:table-row rounded-l-lg sm:rounded-none mb-2 sm:mb-0">
+							<th class="p-2 border-2 h-20">Nom de la sortie</th>
+							<th class="p-2 border-2 h-10">Date de la sortie</th>
+							<th class="p-2 border-2 h-10">Clôture</th>
+							<th class="p-2 border-2 h-10">Inscrits/places</th>
+							<th class="p-2 border-2 h-10">Etat</th>
+							<th class="p-2 border-2 h-10">Inscrit</th>
+							<th class="p-2 border-2 h-10">Organisateur</th>
+							<th class="p-2 border-2 h-10">Actions</th>
+						</tr>
+					{% endfor %}
 				</thead>
 				<tbody class="flex-1 sm:flex-none">
 					{% for sortie in sorties %}
@@ -61,8 +77,9 @@
 									{{ sortie.organisateur.nom }}
 								</a>
 							</td>
-							<td class="border-grey-light border hover:bg-gray-100 p-3 h-10">
-							{# TODO changer le libelle pour l'id #}
+							<td
+								class="border-grey-light border hover:bg-gray-100 p-3 h-10">
+								{# TODO changer le libelle pour l'id #}
 								{% if sortie.etat.libelle not in ["Créée", "Historisée"] %}
 									<a href="{{path('details_sortie', {id : sortie.id})}}">Afficher
 									</a>
@@ -80,24 +97,24 @@
 								{% endif %}
 
 
-                            {% if sortie.etat.libelle == "Créée" and app.user.participantOrganisateurSortie(sortie) %}
-                                <a href="{{ path('modifier_sortie', {id : sortie.id}) }}">Modifier
-                                </a>
-                                <a href="{{ path('publier_sortie', {id : sortie.id}) }}">Publier
-                                </a>
-                                <a href="{{ path('supprimer_sortie', {id : sortie.id}) }}">Supprimer
-                                </a>
-                            {% endif %}
-                            {% if
+								{% if sortie.etat.libelle == "Créée" and app.user.participantOrganisateurSortie(sortie) %}
+									<a href="{{ path('modifier_sortie', {id : sortie.id}) }}">Modifier
+									</a>
+									<a href="{{ path('publier_sortie', {id : sortie.id}) }}">Publier
+									</a>
+									<a href="{{ path('supprimer_sortie', {id : sortie.id}) }}">Supprimer
+									</a>
+								{% endif %}
+								{% if
                                 sortie.etat.libelle in ["Ouverte", "Clôturée"]
                                 and (app.user.participantOrganisateurSortie(sortie) or is_granted("ROLE_ADMIN")) %}
-                                <a href="{{ path('annuler_sortie', {id : sortie.id}) }}">Annuler
-                                </a>
-                            {% endif %}
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
+									<a href="{{ path('annuler_sortie', {id : sortie.id}) }}">Annuler
+									</a>
+								{% endif %}
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
 
 			</table>
 		</div>

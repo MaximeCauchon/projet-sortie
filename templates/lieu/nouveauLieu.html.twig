@@ -3,11 +3,12 @@
 {{ form_start(nouveauLieuForm) }}
 <main class="container flex flex-col md:px-12 px-4 m-4 space-y-4">
 	<div class="space-y-3">
-		{{ form_row(nouveauLieuForm.nom) }}
-		{{ form_row(nouveauLieuForm.rue) }}
-		{{ form_row(nouveauLieuForm.latitude) }}
-		{{ form_row(nouveauLieuForm.longitude) }}
-		{{ form_row(nouveauLieuForm.ville) }}
+		{{ form_row(nouveauLieuForm.nom, {"attr": {'class': 'flex'}}) }}
+		{{ form_row(nouveauLieuForm.rue, {"attr": {'class': 'flex'}}) }}
+		{{ form_row(nouveauLieuForm.latitude, {"attr": {'class': 'flex'}}) }}
+		{{ form_row(nouveauLieuForm.longitude, {"attr": {'class': 'flex'}}) }}
+		{{ form_row(nouveauLieuForm.ville, {"attr": {'class': 'flex'}}) }}
+		{{ form_row(nouveauLieuForm.ajout_lieu, {"attr": {'class': 'mt-2 bg-amber-500 border border-slate-400 mx-2 px-2 py-1 shadow-md shadow-slate-400 text-zinc-50 rounded-xl'}}) }}
 	</div>
 </main>
 {{ form_end(nouveauLieuForm) }}

@@ -33,7 +33,7 @@
     @apply border border-slate-400 mx-2 px-2 py-1;
   }
   form button {
-    @apply border border-slate-400 mx-2 px-2 py-1 shadow-lg text-zinc-50;
+    @apply border border-slate-400 mx-2 px-2 py-1 shadow-md shadow-slate-400 text-zinc-50;
   }
   form a {
     @apply border border-red-600 mx-2 px-2 py-1 shadow-lg;
