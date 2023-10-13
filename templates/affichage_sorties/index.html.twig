@@ -65,7 +65,18 @@
 							<td class="border-grey-light border hover:bg-gray-100 p-3 h-20">{{ sortie.nom }}</td>
 							<td class="border-grey-light border hover:bg-gray-100 p-3 h-10">{{ sortie.dateHeureDebut|date('d/m/y : h:m') }}</td>
 							<td class="border-grey-light border hover:bg-gray-100 p-3 h-10">{{ sortie.dateLimiteInscription|date('d/m') }}</td>
-							<td class="border-grey-light border hover:bg-gray-100 p-3 h-10">{{ sortie.nombreInscrit()}}/{{ sortie.nbInscriptionMax }}</td>
+							<td class="border-grey-light border hover:bg-gray-100 p-3 h-10">
+                            {% if sortie.nbInscriptionMax and sortie.nombreInscrit() >= sortie.nbInscriptionMax %}
+                                COMPLET
+                            {% else %}
+                                {{ sortie.nombreInscrit() }} /
+                                {% if sortie.nbInscriptionMax %}
+                                    {{ sortie.nbInscriptionMax }}
+                                {% else %}
+                                    ∞
+                                {% endif %}
+                            {% endif %}
+                        </td>
 							<td class="border-grey-light border hover:bg-gray-100 p-3 h-10">{{ sortie.etat.libelle }}</td>
 							<td class="border-grey-light border hover:bg-gray-100 p-3 h-10">
 								{% if app.user.participantInscritSortie(sortie) %}
