@@ -31,13 +31,11 @@ class ModifSortieType extends AbstractType
             ])
             ->add('dateHeureDebut', DateTimeType::class, [
                 'html5' => true,
-                'data' => new \DateTime('now'),
                 'widget' => 'single_text',
                 'label' => 'Date et heure de la sortie :'
             ])
             ->add('dateLimiteInscription', DateTimeType::class, [
                 'html5' => true,
-                'data' => new \DateTime('now'),
                 'widget' => 'single_text',
                 'label' => "Date limite d'inscription :"
             ])
