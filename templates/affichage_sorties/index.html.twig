@@ -10,8 +10,8 @@
 
 	<main class="container flex flex-col md:px-12 px-4 lg:m-4 space-y-4">
 		<div class="mt-8">
-			<p>date du jour:
-				{{ "now"|date("m/d/Y") }}</p>
+			<p>Date du jour :
+				{{ "now"| date("d/m/Y H:i") }}</p>
 			<p>
 				<strong>Participant :
 					{{ app.user.prenom }}
