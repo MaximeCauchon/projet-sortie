@@ -36,10 +36,10 @@
 		</div>
 
 		<div class="flex mt-12 space-x-6 justify-center">
-			{{ form_row(modifSortieForm.enregistrer, { 'attr': {'class': 'border-2 border-black px-3 py-1 shadow-md shadow-slate-950'}}) }}
-			{{ form_row(modifSortieForm.publier, { 'attr': {'class': 'border-2 border-black px-3 py-1 shadow-md shadow-slate-950'}}) }}
-			{{ form_row(modifSortieForm.supprimer, { 'attr': {'class': 'border-2 border-black px-3 py-1 shadow-md shadow-slate-950 bg-red-600 text-white'}}) }}
-			<a href="{{path('app_affichage_sorties') }}" class="border-2 border-black px-3 py-1 shadow-md shadow-slate-950 bg-red-200">Annuler</a>
+			{{ form_row(modifSortieForm.enregistrer, { 'attr': {'class': 'bg-amber-600 border w-fit px-4 py-2 text-slate-100 rounded-xl font-semibold'}}) }}
+			{{ form_row(modifSortieForm.publier, { 'attr': {'class': 'bg-amber-600 border w-fit px-4 py-2 text-slate-100 rounded-xl font-semibold'}}) }}
+			{{ form_row(modifSortieForm.supprimer, { 'attr': {'class': 'bg-amber-600 border w-fit px-4 py-2 text-slate-100 rounded-xl font-semibold mr-12 mb-4 lg:mb-0'}}) }}
+			<a href="{{path('app_affichage_sorties') }}" class="bg-red-600 border w-fit px-4 py-2 text-slate-100 rounded-xl font-semibold shadow-lg shadow-slate-400">Annuler</a>
 		</div>
 
 		{{ form_end(modifSortieForm) }}

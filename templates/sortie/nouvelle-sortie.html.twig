@@ -11,74 +11,74 @@
 
 
 		{{ form_start(nouvelleSortieForm) }}
-		<div class="lg:grid lg:grid-cols-2 mt-12 lg:w-1/2 lg:mx-auto text-sm">
-		<div class="lg:grid lg:grid-cols-2 mt-6 lg:mt-12 w-3/4 lg:mx-auto text-sm">
-			<div class="space-y-4">
-				{{ form_row(nouvelleSortieForm.nom, {"attr": {'class': 'flex'}}) }}
-				{{ form_row(nouvelleSortieForm.dateHeureDebut, {"attr": {'class': 'flex'}}) }}
-				{{ form_row(nouvelleSortieForm.dateLimiteInscription, {"attr": {'class': 'flex'}}) }}
-				{{ form_row(nouvelleSortieForm.nbInscriptionMax, {"attr": {'class': 'flex'}}) }}
-				{{ form_row(nouvelleSortieForm.duree, {"attr": {'class': 'flex'}}) }}
-				{{ form_row(nouvelleSortieForm.infosSortie, {"attr": {'class': 'flex'}}) }}
-			</div>
-			<div class="space-y-4 mt-4 lg:mt-0">
-				{{ form_row(nouvelleSortieForm.ville, {"attr": {'class': 'flex'}}) }}
 
-				<div class="flex">
-					{{ form_row(nouvelleSortieForm.lieu, {"attr": {'class': 'flex'}}) }}
-					<div class="group relative" id="modal_button">
-						<button type="button" class="lg:mt-4 mt-3 transition duration-75 ease-in-out hover:bg-amber-600 bg-black rounded-full text-white px-3 text-xl" onclick="modalHandler(true)">+
-						</button>
-					</div>
+			<div class="lg:grid lg:grid-cols-2 mt-6 lg:mt-12 lg:w-1/2 lg:mx-auto text-sm">
+				<div class="space-y-4">
+					{{ form_row(nouvelleSortieForm.nom, {"attr": {'class': 'flex'}}) }}
+					{{ form_row(nouvelleSortieForm.dateHeureDebut, {"attr": {'class': 'flex'}}) }}
+					{{ form_row(nouvelleSortieForm.dateLimiteInscription, {"attr": {'class': 'flex'}}) }}
+					{{ form_row(nouvelleSortieForm.nbInscriptionMax, {"attr": {'class': 'flex'}}) }}
+					{{ form_row(nouvelleSortieForm.duree, {"attr": {'class': 'flex'}}) }}
+					{{ form_row(nouvelleSortieForm.infosSortie, {"attr": {'class': 'flex'}}) }}
 				</div>
-				<div id='rue' class=" font-semibold">
-					Adresse :
-				</div>
-				<div id='code_postal' class=" font-semibold">
-					Code postal :
-				</div>
-				<div id='longitude' class=" font-semibold">
-					longitude :
-				</div>
-				<div id='latitude' class=" font-semibold">
-					latitude :
-				</div>
+				<div class="space-y-4 mt-4 lg:mt-0">
+					{{ form_row(nouvelleSortieForm.ville, {"attr": {'class': 'flex'}}) }}
 
-			</div>
-		</div>
-
-		<div class="lg:flex lg:space-x-6 lg:space-y-0 lg:justify-center lg:mt-12 mt-6 space-y-2">
-			{{ form_row(nouvelleSortieForm.enregistrer, { 'attr': {'class': 'bg-amber-600 border w-fit px-4 py-2 text-slate-100 rounded-xl font-semibold'}}) }}
-			{{ form_row(nouvelleSortieForm.publier, { 'attr': {'class': 'bg-amber-600 border w-fit px-4 py-2 text-slate-100 rounded-xl font-semibold mr-12 mb-4 lg:mb-0'}}) }}
-				<a href="{{path('app_affichage_sorties') }}" class="bg-red-600 border w-fit px-4 py-2 text-slate-100 rounded-xl font-semibold shadow-lg shadow-slate-40">Annuler</a>
-		</div>
-
-
-		{{ form_end(nouvelleSortieForm) }}
-
-		<modal>
-
-			<div class="py-12 bg-gray-700 transition duration-150 ease-in-out z-10 absolute top-0 right-0 bottom-0 left-0" id="modal">
-				<div role="alert" class="container mx-auto w-11/12 md:w-2/3 max-w-lg">
-					<div class="relative py-8 px-5 md:px-10 bg-white shadow-md rounded border border-gray-400">
-
-						<div>
-							{% include "lieu/nouveauLieu.html.twig" %}
+					<div class="flex">
+						{{ form_row(nouvelleSortieForm.lieu, {"attr": {'class': 'flex'}}) }}
+						<div class="group relative" id="modal_button">
+							<button type="button" class="lg:mt-4 mt-3 transition duration-75 ease-in-out hover:bg-amber-600 bg-black rounded-full text-white px-3 text-xl" onclick="modalHandler(true)">+
+							</button>
 						</div>
-
-						<button class="cursor-pointer absolute top-0 right-0 mt-4 mr-5 text-gray-400 hover:text-gray-600 transition duration-150 ease-in-out rounded focus:ring-2 focus:outline-none focus:ring-gray-600" onclick="modalHandler()" aria-label="close modal" role="button">
-							<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="20" height="20" viewbox="0 0 24 24" stroke-width="2.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-								<path stroke="none" d="M0 0h24v24H0z"/>
-								<line x1="18" y1="6" x2="6" y2="18"/>
-								<line x1="6" y1="6" x2="18" y2="18"/>
-							</svg>
-						</button>
 					</div>
+					<div id='rue' class=" font-semibold">
+						Adresse :
+					</div>
+					<div id='code_postal' class=" font-semibold">
+						Code postal :
+					</div>
+					<div id='longitude' class=" font-semibold">
+						longitude :
+					</div>
+					<div id='latitude' class=" font-semibold">
+						latitude :
+					</div>
+
 				</div>
 			</div>
 
-			<script>
-				let modal = document.getElementById("modal");
+			<div class="lg:flex lg:space-x-6 lg:space-y-0 lg:justify-center lg:mt-12 mt-6 space-y-2">
+				{{ form_row(nouvelleSortieForm.enregistrer, { 'attr': {'class': 'bg-amber-600 border w-fit px-4 py-2 text-slate-100 rounded-xl font-semibold'}}) }}
+				{{ form_row(nouvelleSortieForm.publier, { 'attr': {'class': 'bg-amber-600 border w-fit px-4 py-2 text-slate-100 rounded-xl font-semibold mr-12 mb-4 lg:mb-0'}}) }}
+				<a href="{{path('app_affichage_sorties') }}" class="bg-red-600 border w-fit px-4 py-2 text-slate-100 rounded-xl font-semibold shadow-lg shadow-slate-400">Annuler</a>
+			</div>
+
+
+			{{ form_end(nouvelleSortieForm) }}
+
+			<modal>
+
+				<div class="py-12 bg-gray-700 transition duration-150 ease-in-out z-10 absolute top-0 right-0 bottom-0 left-0" id="modal">
+					<div role="alert" class="container mx-auto w-11/12 md:w-2/3 max-w-lg">
+						<div class="relative py-8 px-5 md:px-10 bg-white shadow-md rounded border border-gray-400">
+
+							<div>
+								{% include "lieu/nouveauLieu.html.twig" %}
+							</div>
+
+							<button class="cursor-pointer absolute top-0 right-0 mt-4 mr-5 text-gray-400 hover:text-gray-600 transition duration-150 ease-in-out rounded focus:ring-2 focus:outline-none focus:ring-gray-600" onclick="modalHandler()" aria-label="close modal" role="button">
+								<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="20" height="20" viewbox="0 0 24 24" stroke-width="2.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+									<path stroke="none" d="M0 0h24v24H0z"/>
+									<line x1="18" y1="6" x2="6" y2="18"/>
+									<line x1="6" y1="6" x2="18" y2="18"/>
+								</svg>
+							</button>
+						</div>
+					</div>
+				</div>
+
+				<script>
+					let modal = document.getElementById("modal");
 modal.style.display = "none";
 
 function modalHandler(val) {
@@ -111,16 +111,16 @@ requestAnimationFrame(fade);
 }
 })();
 }
-			</script>
+				</script>
 
-		</modal>
-	</main>
+			</modal>
+		</main>
 
-{% endblock %}
+	{% endblock %}
 
-{% block javascripts %}
-	<script>
-		window.onload = () => {
+	{% block javascripts %}
+		<script>
+			window.onload = () => {
 let ville = document.querySelector('#nouvelle_sortie_ville');
 let codePostal = document.querySelector('#code_postal');
 
@@ -192,5 +192,5 @@ console.log("lieu", lieu);
 
 
 }
-	</script>
-{% endblock %}
+		</script>
+	{% endblock %}
